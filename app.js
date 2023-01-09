@@ -11,14 +11,14 @@ const profileRouter = require("./routes/profile");
 
 const app = express();
 const mongoose = require("mongoose");
-// const mongoDB = process.env.URL;
-// mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-// const db = mongoose.connection;
+const mongoDB = process.env.URL;
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/', indexRouter);
+app.use('/home', indexRouter);
 // app.use('/gigs', gigsRouter);
 // app.use('/messaging', messagingRouter);
 // app.use('/network', networkRouter);
