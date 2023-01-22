@@ -1,20 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const profile_controller = require("../controllers/profileController");
 
-const profileCard = require("../models/profile-card")
-
-router.get('/profilecard/:id', (req, res) => {
-  let id = req.params.id;
-  profileCard.findById(id)
-    .then(card => {
-      return res.status(200).json({
-        card
-      });
-    })
-    .catch(error => {
-      console.log(error);
-    })
-})
+router.get('/profilecard/:id', profile_controller.profile_card);
 
 router.post('/profilecard', (req, res) => {
   console.log(req.body)
