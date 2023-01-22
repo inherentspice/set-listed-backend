@@ -5,7 +5,9 @@ const Schema = mongoose.Schema;
 const profileCardSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   tagline: { type: String, required: false },
+  location: { type: String, required: false },
   userProfileViews: { type: Number, required: false },
   userPostImpressions: { type: Number, required: false }
 });
