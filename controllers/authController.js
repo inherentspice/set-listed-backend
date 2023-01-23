@@ -8,7 +8,7 @@ exports.postLogin = (req, res) => {
     validationErrors.push({ msg: "Please enter a valid email address" });
   }
   if (validator.isEmpty(req.body.password)) {
-    validationErrors.push({ msg: "Password cannot be black" });
+    validationErrors.push({ msg: "Password cannot be blank" });
   }
 
   if (validationErrors.length) {
@@ -20,32 +20,36 @@ exports.postLogin = (req, res) => {
 
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      return next(err);
+      return res.status(500).json({ msg: err.message });
     }
     if (!user) {
-      res.status(406).json({ msd: "User not found" })
+      return res.status(406).json({ msg: "User not found" });
     }
-    req.logIn(user, (err)  => {
+    req.logIn(user, (err) => {
       if (err) {
-        return next(err);
+        return res.status(500).json({ msg: err.message });
       }
-      res.status(200).json({ user: user.id});
+      res.status(200).json({ user: user.id });
     });
-  })(req, res, next);
+  })(req, res);
 };
 
 exports.logOut = (req, res) => {
-  req.logout(() => {
-    console.log("User has logged out");
-  })
-  req.session.destroy((err) => {
+  req.logout(err => {
     if (err) {
-      console.log("Error: failed to destroy the session during logout.". err);
+      console.log("Error: failed to logout.", err);
+      return res.status(500).json({ message: "Error: failed to logout." });
     }
-    req.user = null;
-    res.status(200).json({ user: req.user });
+    req.session.destroy(err => {
+      if (err) {
+        console.log("Error: failed to destroy the session during logout.", err);
+        return res.status(500).json({ message: "Error: failed to destroy the session during logout." });
+      }
+      res.status(200).json({ message: "Successfully logged out." });
+    });
   });
 };
+
 
 exports.postSignup = (req, res, next) => {
   const validationErrors = [];
@@ -60,7 +64,7 @@ exports.postSignup = (req, res, next) => {
   }
 
   if (validationErrors.length) {
-    res.status(406).json({ msg: validationErrors });
+    return res.status(406).json({ msg: validationErrors });
   }
   req.body.email = validator.normalizeEmail(req.body.email, {
     gmail_remove_dots: false,
@@ -73,10 +77,10 @@ exports.postSignup = (req, res, next) => {
 
   User.findOne({ email: req.body.email }, (err, existingUser) => {
       if (err) {
-        return next(user);
+        return next(err);
       }
       if (existingUser) {
-        res.status(400).json({msg: "Account with that email address already exists."});
+        return res.status(400).json({msg: "Account with that email address already exists."});
       }
       user.save((err) => {
         if (err) {

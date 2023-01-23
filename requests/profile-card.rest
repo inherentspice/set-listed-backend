@@ -1,4 +1,4 @@
-POST http://localhost:8080/home/profilecard
+POST http://localhost:8080/profilecard
 Content-Type: application/json
 
 {

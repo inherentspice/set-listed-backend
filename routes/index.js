@@ -5,7 +5,7 @@ const profileController = require("../controllers/profileController");
 const postController = require("../controllers/postController");
 const authController = require("../controllers/authController");
 
-router.get("/profilecard/:id", ensureAuth, profileController.profile_card);
+// router.get("/profilecard/:id", ensureAuth, profileController.profile_card);
 // router.get("/feed", ensureAuth, postController.getFeed);
 router.post("/login", authController.postLogin);
 router.post("/signup", authController.postSignup);
