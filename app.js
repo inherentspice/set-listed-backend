@@ -1,10 +1,10 @@
 const express = require("express");
 require('dotenv').config();
 const cors = require("cors");
-const mongoose = require("mongoose")
-const passport = require("passport");
+const mongoose = require("mongoose");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const passport = require("passport");
+const MongoStore = require("connect-mongo")(session);
 const logger = require("morgan");
 const connectDB = require("./config/database");
 
@@ -38,15 +38,16 @@ app.use(
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.URL })
+    store: new MongoStore({ url: process.env.URL })
   })
 );
+
 
 // Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/home', indexRouter);
+app.use('/', indexRouter);
 // app.use('/gigs', gigsRouter);
 // app.use('/messaging', messagingRouter);
 // app.use('/network', networkRouter);
