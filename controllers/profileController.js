@@ -1,6 +1,6 @@
 const ProfileCard = require("../models/profile-card");
 
-exports.profile_card = (req, res) => {
+exports.profileCard = (req, res) => {
   let id = req.params.id;
   ProfileCard.findById(id)
     .then(card => {
