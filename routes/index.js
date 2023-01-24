@@ -10,6 +10,7 @@ const authController = require("../controllers/authController");
 router.post("/login", authController.postLogin);
 router.post("/signup", authController.postSignup);
 router.get("/logout", authController.logOut);
+router.get("/check-session", authController.checkSession);
 
 router.post("/profilecard", (req, res) => {
   console.log(req.body)

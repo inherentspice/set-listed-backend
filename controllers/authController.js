@@ -1,6 +1,7 @@
 const validator = require("validator");
 const passport = require("passport");
 const User = require("../models/user");
+const user = require("../models/user");
 
 exports.postLogin = (req, res) => {
   const validationErrors = [];
@@ -87,6 +88,15 @@ exports.postSignup = (req, res, next) => {
           return next(err);
         }
         res.status(200).json({ user: user.id });
-      });
     });
+  });
+}
+
+exports.checkSession = (req, res) => {
+  if(req.user) {
+    console.log(req.user._id);
+    return res.status(200).json({user: req.user._id});
+  } else {
+    return res.status(401).json({user: ""});
   }
+}
