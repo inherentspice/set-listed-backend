@@ -7,9 +7,10 @@ const upload = require("../middleware/multer");
 
 router.get("/:id", profileController.getProfile);
 router.put("/hero", profileController.modifyHero);
+router.put("/profilepicture", upload.single("file"), profileController.modifyProfilePic);
 router.put("/about", profileController.modifyAbout);
 
-router.post("/featured", profileController.createFeatured);
+router.post("/featured", upload.single("file"), profileController.createFeatured);
 router.put("/featured/:id", profileController.modifyFeatured);
 router.delete("/featured/:id", profileController.deleteFeatured);
 
@@ -28,3 +29,5 @@ router.delete("/skill/:id", profileController.deleteSkill);
 router.post("/post", postController.createPost);
 router.put("/post/:id", postController.modifyPost);
 router.delete("/post/:id", postController.deletePost);
+
+module.exports = router;
