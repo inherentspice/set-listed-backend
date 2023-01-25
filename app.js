@@ -52,7 +52,7 @@ app.use('/', indexRouter);
 // app.use('/messaging', messagingRouter);
 // app.use('/network', networkRouter);
 // app.use('/notifications', notificationsRouter);
-// app.use('/profile', profileRouter);
+app.use('/profile', profileRouter);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

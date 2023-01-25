@@ -1,0 +1,9 @@
+POST http://localhost:8080/profile/skill
+Content-Type: application/json
+
+{
+  "user": "63ce35a8c716218c446de650",
+  "content": "Crowdwork"
+}
+
+###
