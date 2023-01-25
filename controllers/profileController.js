@@ -88,7 +88,7 @@ exports.createSkill = (req, res) => {
       console.log(err);
       return next(err);
     }
-    res.status(400).json({skill: skill});
+    res.status(200).json({skill: skill});
   })
 }
 
