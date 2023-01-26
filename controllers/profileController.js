@@ -76,14 +76,6 @@ exports.createExperience = (req, res) => {
     return res.status(400).json({error: "Content field is required"});
   }
 
-  if (!newExperienceInfo.user) {
-    return res.status(400).json({error: "Start date field is required"});
-  }
-
-  if (!newExperienceInfo.user) {
-    return res.status(400).json({error: "End date field is required"});
-  }
-
   const experience = new Experience({
     user: newExperienceInfo.user,
     title: newExperienceInfo.title,
