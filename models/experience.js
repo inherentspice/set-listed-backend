@@ -15,9 +15,13 @@ const ExperienceSchema = new Schema({
     type: String,
     required: true
   },
-  date: {
+  dateStart: {
     type: Date,
-    required: true
+    required: true,
+  },
+  dateEnd: {
+    type: Date,
+    required: false
   }
 });
 

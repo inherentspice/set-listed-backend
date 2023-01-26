@@ -7,3 +7,21 @@ Content-Type: application/json
 }
 
 ###
+
+POST http://localhost:8080/profile/award
+Content-Type: application/json
+
+{
+  "user": "63ce35a8c716218c446de650",
+  "content": "Semi-Finalist @ Zonkies Comedy Competition"
+}
+
+###
+
+POST http://localhost:8080/profile/post
+Content-Type: application/json
+
+{
+  "user": "63ce35a8c716218c446de650",
+  "content": "I truly believe that I am the Bill Burr of the improv stage."
+}
