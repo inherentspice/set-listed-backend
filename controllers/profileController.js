@@ -59,7 +59,32 @@ exports.createExperience = (req, res) => {
 }
 
 exports.createAward = (req, res) => {
-  return
+  if (!req.body) {
+    return res.status(400).json({error: "Invalid request body"});
+  }
+
+  const newAwardInfo = req.body;
+
+  if (!newAwardInfo.user) {
+    return res.status(400).json({error: "User field is required"});
+  }
+
+  if (!newAwardInfo.content) {
+    return res.status(400).json({error: "Content field is required"});
+  }
+
+  const award = new Award({
+    user: newAwardInfo.user,
+    content: newAwardInfo.content
+  });
+
+  award.save((err) => {
+    if (err) {
+      console.log(err);
+      return next(err);
+    }
+    res.status(200).json({award: award});
+  })
 }
 
 exports.createSkill = (req, res) => {
