@@ -11,13 +11,17 @@ const ExperienceSchema = new Schema({
     type: String,
     required: true
   },
+  venue: {
+    type: String,
+    required: true
+  },
   content: {
     type: String,
     required: true
   },
   dateStart: {
     type: Date,
-    required: true,
+    required: false,
   },
   dateEnd: {
     type: Date,

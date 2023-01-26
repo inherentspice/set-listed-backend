@@ -25,3 +25,16 @@ Content-Type: application/json
   "user": "63ce35a8c716218c446de650",
   "content": "I truly believe that I am the Bill Burr of the improv stage."
 }
+
+###
+
+POST http://localhost:8080/profile/experience
+Content-Type: application/json
+
+{
+  "user": "63ce35a8c716218c446de650",
+  "title": "Host",
+  "venue": "Park Tavern",
+  "content": "Host comedy show weekly"
+
+}

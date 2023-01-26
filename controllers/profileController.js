@@ -55,7 +55,43 @@ exports.createFeatured = (req, res) => {
 }
 
 exports.createExperience = (req, res) => {
-  return
+  if (!req.body) {
+    return res.status(400).json({error: "Invalid request body"});
+  }
+  const newExperienceInfo = req.body;
+
+  if (!newExperienceInfo.user) {
+    return res.status(400).json({error: "User field is required"});
+  }
+
+  if (!newExperienceInfo.title) {
+    return res.status(400).json({error: "Title field is required"});
+  }
+
+  if (!newExperienceInfo.venue) {
+    return res.status(400).json({error: "Venue field is required"});
+  }
+
+  if (!newExperienceInfo.content) {
+    return res.status(400).json({error: "Content field is required"});
+  }
+
+  const experience = new Experience({
+    user: newExperienceInfo.user,
+    title: newExperienceInfo.title,
+    venue: newExperienceInfo.venue,
+    content: newExperienceInfo.content,
+    dateStart: newExperienceInfo.dateStart ? newExperienceInfo.dateStart : undefined,
+    dateEnd: newExperienceInfo.dateEnd ? newExperienceInfo.dateEnd : undefined
+  });
+
+  experience.save((err) => {
+    if (err) {
+      console.log(err);
+      return next(err);
+    }
+    res.status(200).json({experience: experience});
+  })
 }
 
 exports.createAward = (req, res) => {
