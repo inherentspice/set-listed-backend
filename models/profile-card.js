@@ -34,11 +34,13 @@ const ProfileCardSchema = new Schema({
   },
   userProfileViews: {
     type: Number,
-    required: false
+    required: false,
+    default: 0
   },
   userPostImpressions: {
     type: Number,
-    required: false
+    required: false,
+    default: 0
   }
 });
 

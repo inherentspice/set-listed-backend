@@ -1,14 +1,29 @@
-const multer = require("multer");
-const path = require("path");
 
-module.exports = multer({
-  storage: multer.diskStorage({}),
-  fileFilter: (req, file, cb) => {
-    let ext = path.extname(file.originalname);
-    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
-      cb(new Error("File type is not supported"), false);
-      return;
+const multer = require('multer');
+
+const ALLOWED_FORMATS = ['image/jpeg', 'image/png', 'image/jpg'];
+
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  fileFilter: function(req, file, cb) {
+    if (ALLOWED_FORMATS.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Not supported file type!'), false);
     }
-    cb(null, true);
-  },
-});
+  }
+})
+
+const singleUpload = upload.single('image');
+const singleUploadCtrl = (req, res, next) => {
+  singleUpload(req, res, (error) => {
+    if (error) {
+      return res.status(422).send({message: 'Image upload fail!'});
+    }
+
+    next();
+  })
+}
+
+module.exports = singleUploadCtrl;

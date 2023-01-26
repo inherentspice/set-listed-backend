@@ -1,7 +1,8 @@
 const validator = require("validator");
 const passport = require("passport");
+const async = require("async");
 const User = require("../models/user");
-const user = require("../models/user");
+const ProfileCard = require("../models/profile-card");
 
 exports.postLogin = (req, res) => {
   const validationErrors = [];
@@ -52,7 +53,7 @@ exports.logOut = (req, res) => {
 };
 
 
-exports.postSignup = (req, res, next) => {
+exports.postSignup = async (req, res, next) => {
   const validationErrors = [];
   if (!validator.isEmail(req.body.email)) {
     validationErrors.push({ msg: "Please enter a valid email address." });
@@ -64,6 +65,10 @@ exports.postSignup = (req, res, next) => {
     validationErrors.push({ msg: "Password don't match." });
   }
 
+  if (!req.body.firstName || !req.body.lastName) {
+    validationErrors.push({ msg: "Please enter a first and last name" });
+  }
+
   if (validationErrors.length) {
     return res.status(406).json({ msg: validationErrors });
   }
@@ -71,30 +76,38 @@ exports.postSignup = (req, res, next) => {
     gmail_remove_dots: false,
   });
 
-  const user = new User({
-    email: req.body.email,
-    password: req.body.password,
-  });
-
-  User.findOne({ email: req.body.email }, (err, existingUser) => {
-      if (err) {
-        return next(err);
-      }
-      if (existingUser) {
-        return res.status(400).json({msg: "Account with that email address already exists."});
-      }
-      user.save((err) => {
-        if (err) {
-          return next(err);
-        }
-        res.status(200).json({ user: user.id });
+  try {
+    const user = new User({
+      email: req.body.email,
+      password: req.body.password,
     });
-  });
-}
+
+    const existingUser = await User.findOne({ email: req.body.email });
+
+    if (existingUser) {
+      return res.status(400).json({msg: "Account with that email address already exists."});
+    }
+
+    await user.save()
+
+    const userProfile = new ProfileCard({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      user: user.id,
+      image: "/",
+      cloudinaryId: "onoo1313iojo"
+    })
+
+    await userProfile.save()
+
+    res.status(200).json({ user: user.id });
+  } catch (err) {
+    next(err);
+  }
+};
 
 exports.checkSession = (req, res) => {
   if(req.user) {
-    console.log(req.user._id);
     return res.status(200).json({user: req.user._id});
   } else {
     return res.status(401).json({user: ""});
