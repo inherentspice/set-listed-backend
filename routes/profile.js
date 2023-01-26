@@ -4,13 +4,15 @@ const { ensureAuth } = require("../middleware/auth");
 const profileController = require("../controllers/profileController");
 const postController = require("../controllers/postController");
 const upload = require("../middleware/multer");
+const singleUploadCtrl = require("../middleware/multer");
 
 router.get("/:id", profileController.getProfile);
 router.put("/hero", profileController.modifyHero);
-router.put("/profilepicture", upload.single("file"), profileController.modifyProfilePic);
+router.put("/profilepicture", singleUploadCtrl, profileController.modifyProfilePic);
+router.put("/backgroundpicture", singleUploadCtrl, profileController.modifyBackgroundPic);
 router.put("/about", profileController.modifyAbout);
 
-router.post("/featured", upload.single("file"), profileController.createFeatured);
+router.post("/featured", singleUploadCtrl, profileController.createFeatured);
 router.put("/featured/:id", profileController.modifyFeatured);
 router.delete("/featured/:id", profileController.deleteFeatured);
 
