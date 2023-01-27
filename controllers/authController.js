@@ -1,6 +1,5 @@
 const validator = require("validator");
 const passport = require("passport");
-const async = require("async");
 const User = require("../models/user");
 const ProfileCard = require("../models/profile-card");
 

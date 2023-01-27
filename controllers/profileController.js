@@ -30,6 +30,10 @@ exports.modifyProfilePic = (req, res) => {
   return
 }
 
+exports.modifyBackgroundPic = (req, res) => {
+  return
+}
+
 exports.modifyAbout = (req, res) => {
   return
 }
@@ -50,8 +54,43 @@ exports.modifySkill = (req, res) => {
   return
 }
 
-exports.createFeatured = (req, res) => {
-  return
+exports.createFeatured = async (req, res) => {
+  try {
+    const body = req.file;
+    if (!body) {
+      return res.status(406).json({error: "Missing img file!"});
+    }
+
+    if (!body.req.title) {
+      return res.status(406).json({error: "Missing title!"});
+    }
+
+    if (!body.req.content) {
+      return res.status(406).json({error: "Missing congtent!"});
+    }
+
+    const file64 = formatBufferTo64(body);
+    const uploadResult = await cloudinaryUpload(file64.content);
+
+    const featured = new Featured({
+      title: req.body.title,
+      imageURL: uploadResult.secure_url,
+      cloudinaryId: uploadResult.public_id,
+      content: req.body.content,
+      user: req.body.user
+    })
+
+    featured.save((err) => {
+      if (err) {
+        console.log(err)
+        return res.status(500).json({error: "Something went wrong with saving the new featured post"});
+      }
+      return res.status(200).json({featured: featured});
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(422).json({ error: err.message });
+  }
 }
 
 exports.createExperience = (req, res) => {
