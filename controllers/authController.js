@@ -94,8 +94,8 @@ exports.postSignup = async (req, res, next) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       user: user.id,
-      image: "/",
-      cloudinaryId: "onoo1313iojo"
+      image: "https://res.cloudinary.com/dhptcrsjc/image/upload/v1674789718/Set-Listed/empty-profile-pic_b2hrxu.png",
+      cloudinaryId: "/"
     })
 
     await userProfile.save()

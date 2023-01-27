@@ -9,4 +9,4 @@ cloudinary.config({
 
 
 
-module.exports = cloudinaryUpload = file => cloudinary.uploader.upload(file)
+module.exports = cloudinaryUpload = file => cloudinary.uploader.upload(file, {folder: "Set-Listed"})
