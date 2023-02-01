@@ -43,3 +43,12 @@ Content-Type: application/json
 
 PUT http://localhost:8080/profile/skill/63da07875317c33cc7eabbd3
 Content-Type: application/json
+
+###
+
+PUT http://localhost:8080/profile/award/63da0f54a8a09bc73fcb0c59
+Content-Type: application/json
+
+{
+  "content": "Spokesperson for Hungry jakes"
+}
