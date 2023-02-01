@@ -33,8 +33,15 @@ exports.createPost = (req, res) => {
   })
 }
 
-exports.modifyPost = (req, res) => {
-  return
+exports.modifyPost = async (req, res) => {
+  const postId = req.params.id;
+  try{
+    const post = await Post.findByIdAndUpdate(postId, { content: req.body.content }, { new: true });
+    res.status(200).json({ post: post });
+  } catch (err){
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.deletePost = (req, res) => {

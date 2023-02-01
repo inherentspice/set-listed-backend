@@ -46,14 +46,21 @@ exports.modifyExperience = (req, res) => {
   return
 }
 
-exports.modifyAward = (req, res) => {
-  return
+exports.modifyAward = async (req, res) => {
+  const awardId = req.params.id;
+  try{
+    const award = await Award.findByIdAndUpdate(awardId, { content: req.body.content}, { new: true });
+    res.status(200).json({award: award});
+  } catch (err) {
+    console.log(err);
+    return next(err);
+  }
 }
 
 exports.modifySkill = async (req, res) => {
   const skillId = req.params.id;
   try {
-    const skill = await Skill.findByIdAndUpdate(skillId, {$inc: {endorsements: 1}});
+    const skill = await Skill.findByIdAndUpdate(skillId, {$inc: {endorsements: 1}}, { new: true });
     return res.status(200).json({skill: skill})
   } catch (err) {
     console.log(err)
