@@ -52,3 +52,12 @@ Content-Type: application/json
 {
   "content": "Spokesperson for Hungry jakes"
 }
+
+###
+
+PUT http://localhost:8080/profile/post/63da141e79efdae03f9c86d6
+Content-Type: application/json
+
+{
+  "content": "I am not man but"
+}
