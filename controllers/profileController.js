@@ -50,8 +50,15 @@ exports.modifyAward = (req, res) => {
   return
 }
 
-exports.modifySkill = (req, res) => {
-  return
+exports.modifySkill = async (req, res) => {
+  const skillId = req.params.id;
+  try {
+    const skill = await Skill.findByIdAndUpdate(skillId, {$inc: {endorsements: 1}});
+    return res.status(200).json({skill: skill})
+  } catch (err) {
+    console.log(err)
+    return next(err)
+  }
 }
 
 exports.createFeatured = async (req, res) => {
