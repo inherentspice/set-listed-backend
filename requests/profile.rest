@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "user": "63ce35a8c716218c446de650",
-  "content": "Crowdwork"
+  "content": "Hosting"
 }
 
 ###
@@ -13,7 +13,7 @@ Content-Type: application/json
 
 {
   "user": "63ce35a8c716218c446de650",
-  "content": "Semi-Finalist @ Zonkies Comedy Competition"
+  "content": "Spokesperson for Kokoa-Koloa"
 }
 
 ###
@@ -38,3 +38,8 @@ Content-Type: application/json
   "content": "Host comedy show weekly"
 
 }
+
+###
+
+PUT http://localhost:8080/profile/skill/63da07875317c33cc7eabbd3
+Content-Type: application/json
