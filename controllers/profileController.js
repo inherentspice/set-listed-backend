@@ -4,6 +4,8 @@ const Experience = require("../models/experience");
 const Award = require("../models/award");
 const Skill = require("../models/skill");
 const About = require("../models/about");
+const formatBufferTo64 = require("./middleware/data-uri");
+const { cloudinaryUpload, cloudinaryDelete } = require("../middleware/cloudinary");
 
 exports.getProfileCard = async (req, res) => {
   let id = req.params.id;
@@ -29,8 +31,31 @@ exports.modifyProfilePic = (req, res) => {
   return
 }
 
-exports.modifyBackgroundPic = (req, res) => {
-  return
+exports.modifyBackgroundPic = async (req, res) => {
+  let userId = req.params.id;
+  const body = req.file;
+  if (!body) {
+    return res.status(406).json({error: "Missing img file!"});
+  }
+
+  try {
+    const currentBackgroundPic = await ProfileCard.find({ user: userId });
+    if (currentBackgroundPic.backgroundCloudinaryId) {
+      await cloudinaryDelete(currentBackgroundPic.backgroundCloudinaryId)
+    }
+
+    const file64 = formatBufferTo64(body);
+    const uploadResult = await cloudinaryUpload(file64.content);
+
+    currentBackgroundPic.backgroundImage = uploadResult.secure_url;
+    currentBackgroundPic.backgroundCloudinaryId = uploadResult.public_id;
+
+    await currentBackgroundPic.save()
+    res.status(200).json({profileCard: currentBackgroundPic})
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.modifyAbout = async (req, res) => {
