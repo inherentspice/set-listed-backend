@@ -1,11 +1,1 @@
-POST http://localhost:8080/profilecard
-Content-Type: application/json
-
-{
-  "firstName": "Ben",
-  "lastName": "Dover"
-}
-
-###
-
-GET http://localhost:8080/home/profilecard/63ce35a8c716218c446de650
+GET http://localhost:8080/profilecard/63dddee66d67ea2e63f428f1

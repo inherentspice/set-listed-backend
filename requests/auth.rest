@@ -4,6 +4,8 @@ Content-Type: application/json
 {
   "email": "test@test.com",
   "password": "testtest",
+  "firstName": "George",
+  "lastName": "Castles",
   "confirmPassword": "testtest"
 }
 

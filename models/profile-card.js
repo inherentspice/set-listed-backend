@@ -24,6 +24,14 @@ const ProfileCardSchema = new Schema({
     type: String,
     require: true
   },
+  backgroundImage: {
+    type: String,
+    require: false
+  },
+  backgroundCloudinaryId: {
+    type: String,
+    require: false
+  },
   tagline: {
     type: String,
     required: false
