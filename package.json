@@ -20,8 +20,10 @@
   "homepage": "https://github.com/inherentspice/set-listed-backend#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "cloudinary": "^1.33.0",
     "connect-mongo": "^3.2.0",
     "cors": "^2.8.5",
+    "datauri": "^4.1.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",

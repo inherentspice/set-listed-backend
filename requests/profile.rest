@@ -77,5 +77,5 @@ Content-Type: application/json
 {
   "title": "Host",
   "venue": "Park Tavern",
-  "content": "Host comedy show monthly"
+  "content": "Host comedy show monthly",
 }
