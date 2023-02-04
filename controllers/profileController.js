@@ -27,8 +27,32 @@ exports.modifyHero = (req, res) => {
   return
 }
 
-exports.modifyProfilePic = (req, res) => {
-  return
+exports.modifyProfilePic = async (req, res) => {
+  let userId = req.params.id;
+  const body = req.file;
+
+  if (!body) {
+    return res.status(406).json({error: "Missing img file!"});
+  }
+
+  try {
+    const currentPic = await ProfileCard.find({ user: userId });
+    if (currentPic.cloudinaryId) {
+      await cloudinaryDelete(currentPic.cloudinaryId);
+    }
+
+    const file64 = formatBufferTo64(body);
+    const uploadResult = await cloudinaryUpload(file64.content);
+
+    currentPic.image = uploadResult.secure_url;
+    currentPic.cloudinaryId = uploadResult.public_id;
+
+    await currentPic.save()
+    res.status(200).json({profileCard: currentPic});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.modifyBackgroundPic = async (req, res) => {
@@ -50,8 +74,8 @@ exports.modifyBackgroundPic = async (req, res) => {
     currentBackgroundPic.backgroundImage = uploadResult.secure_url;
     currentBackgroundPic.backgroundCloudinaryId = uploadResult.public_id;
 
-    await currentBackgroundPic.save()
-    res.status(200).json({profileCard: currentBackgroundPic})
+    await currentBackgroundPic.save();
+    res.status(200).json({profileCard: currentBackgroundPic});
   } catch (err) {
     console.log(err);
     next(err);
