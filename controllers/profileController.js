@@ -5,17 +5,16 @@ const Award = require("../models/award");
 const Skill = require("../models/skill");
 const Post = require("../models/post");
 
-exports.getProfileCard = (req, res) => {
+exports.getProfileCard = async (req, res) => {
   let id = req.params.id;
-  ProfileCard.findById(id)
-    .then(card => {
-      return res.status(200).json({
-        card
-      });
-    })
-    .catch(error => {
-      console.log(error);
-    })
+
+  try {
+    const profileCard = await ProfileCard.findById(id);
+    res.status(200).json({profileCard: profileCard});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.getProfile = (req, res) => {
@@ -61,7 +60,7 @@ exports.modifySkill = async (req, res) => {
   const skillId = req.params.id;
   try {
     const skill = await Skill.findByIdAndUpdate(skillId, {$inc: {endorsements: 1}}, { new: true });
-    return res.status(200).json({skill: skill})
+    res.status(200).json({skill: skill})
   } catch (err) {
     console.log(err)
     return next(err)
@@ -94,20 +93,16 @@ exports.createFeatured = async (req, res) => {
       user: req.body.user
     })
 
-    featured.save((err) => {
-      if (err) {
-        console.log(err)
-        return res.status(500).json({error: "Something went wrong with saving the new featured post"});
-      }
-      return res.status(200).json({featured: featured});
-    })
+
+    const newFeatured = await featured.save();
+    res.status(200).json({featured: newFeatured});
   } catch (err) {
     console.log(err);
     res.status(422).json({ error: err.message });
   }
 }
 
-exports.createExperience = (req, res) => {
+exports.createExperience = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({error: "Invalid request body"});
   }
@@ -138,16 +133,17 @@ exports.createExperience = (req, res) => {
     dateEnd: newExperienceInfo.dateEnd ? newExperienceInfo.dateEnd : undefined
   });
 
-  experience.save((err) => {
-    if (err) {
-      console.log(err);
-      return next(err);
-    }
-    res.status(200).json({experience: experience});
-  })
+  try {
+    const newExperience = await experience.save();
+    res.status(200).json({experience: newExperience});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-exports.createAward = (req, res) => {
+
+exports.createAward = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({error: "Invalid request body"});
   }
@@ -166,17 +162,16 @@ exports.createAward = (req, res) => {
     user: newAwardInfo.user,
     content: newAwardInfo.content
   });
-
-  award.save((err) => {
-    if (err) {
-      console.log(err);
-      return next(err);
-    }
-    res.status(200).json({award: award});
-  })
+  try {
+    const newAward = await award.save();
+    res.status(200).json({award: newAward})
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-exports.createSkill = (req, res) => {
+exports.createSkill = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({error: "Invalid request body"});
   }
@@ -197,13 +192,13 @@ exports.createSkill = (req, res) => {
     endorsements: 0
   });
 
-  skill.save((err) => {
-    if (err) {
-      console.log(err);
-      return next(err);
-    }
-    res.status(200).json({skill: skill});
-  })
+  try {
+    const newSkill = await skill.save();
+    res.status(200).json({skill: newSkill});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 
