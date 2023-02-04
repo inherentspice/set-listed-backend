@@ -4,7 +4,7 @@ exports.getFeed = (req, res) => {
   console.log("here");
 }
 
-exports.createPost = (req, res) => {
+exports.createPost = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({error: "Invalid request body"});
   }
@@ -24,13 +24,13 @@ exports.createPost = (req, res) => {
     content: newPostInfo.content
   });
 
-  post.save((err) => {
-    if (err) {
-      console.log(err);
-      return next(err);
-    }
-    res.status(200).json({post: post});
-  })
+  try {
+    const newPost = await post.save();
+    res.status(200).json({post: newPost});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.modifyPost = async (req, res) => {

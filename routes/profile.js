@@ -3,7 +3,6 @@ const router = express.Router();
 const { ensureAuth } = require("../middleware/auth");
 const profileController = require("../controllers/profileController");
 const postController = require("../controllers/postController");
-const upload = require("../middleware/multer");
 const singleUploadCtrl = require("../middleware/multer");
 
 router.get("/:id", profileController.getProfile);
