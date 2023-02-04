@@ -4,7 +4,7 @@ const Experience = require("../models/experience");
 const Award = require("../models/award");
 const Skill = require("../models/skill");
 const About = require("../models/about");
-const formatBufferTo64 = require("./middleware/data-uri");
+const formatBufferTo64 = require("../middleware/data-uri");
 const { cloudinaryUpload, cloudinaryDelete } = require("../middleware/cloudinary");
 
 exports.getProfileCard = async (req, res) => {
@@ -97,8 +97,26 @@ exports.modifyFeatured = (req, res) => {
   return
 }
 
-exports.modifyExperience = (req, res) => {
-  return
+exports.modifyExperience = async (req, res) => {
+  const experienceId = req.params.id;
+  try {
+    title = req.body.title;
+    venue = req.body.venue;
+    content = req.body.content;
+    dateStart = req.body.dateStart ? req.body.dateStart : undefined;
+    dateEnd = req.body.dateEnd ? req.body.dateEnd : undefined;
+    const experience = await Experience.findByIdAndUpdate(experienceId, {
+      title,
+      venue,
+      content,
+      dateStart,
+      dateEnd,
+    }, { new: true });
+    res.status(200).json({experience: experience});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.modifyAward = async (req, res) => {
@@ -108,7 +126,7 @@ exports.modifyAward = async (req, res) => {
     res.status(200).json({award: award});
   } catch (err) {
     console.log(err);
-    return next(err);
+    next(err);
   }
 }
 
