@@ -2,7 +2,7 @@ POST http://localhost:8080/profile/skill
 Content-Type: application/json
 
 {
-  "user": "63ce35a8c716218c446de650",
+  "user": "63dddee66d67ea2e63f428f1",
   "content": "Hosting"
 }
 
@@ -12,7 +12,7 @@ POST http://localhost:8080/profile/award
 Content-Type: application/json
 
 {
-  "user": "63ce35a8c716218c446de650",
+  "user": "63dddee66d67ea2e63f428f1",
   "content": "Spokesperson for Kokoa-Koloa"
 }
 
@@ -22,7 +22,7 @@ POST http://localhost:8080/profile/post
 Content-Type: application/json
 
 {
-  "user": "63ce35a8c716218c446de650",
+  "user": "63dddee66d67ea2e63f428f1",
   "content": "I truly believe that I am the Bill Burr of the improv stage."
 }
 
@@ -32,21 +32,20 @@ POST http://localhost:8080/profile/experience
 Content-Type: application/json
 
 {
-  "user": "63ce35a8c716218c446de650",
+  "user": "63dddee66d67ea2e63f428f1",
   "title": "Host",
   "venue": "Park Tavern",
   "content": "Host comedy show weekly"
-
 }
 
 ###
 
-PUT http://localhost:8080/profile/skill/63da07875317c33cc7eabbd3
+PUT http://localhost:8080/profile/skill/63dddf3f6d67ea2e63f428fc
 Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/profile/award/63da0f54a8a09bc73fcb0c59
+PUT http://localhost:8080/profile/award/63dddf5b6d67ea2e63f428ff
 Content-Type: application/json
 
 {
@@ -55,9 +54,28 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/profile/post/63da141e79efdae03f9c86d6
+PUT http://localhost:8080/profile/post/63dddf806d67ea2e63f42904
 Content-Type: application/json
 
 {
   "content": "I am not man but"
+}
+
+###
+
+PUT http://localhost:8080/profile/about/63dddee66d67ea2e63f428f1
+Content-Type: application/json
+
+{
+  "content": "I just received the initial deposit for a corporate show in Dubai that's coming up in a couple of weeks. The show pays $8000, yes, that's right, EIGHT THOUSAND US DOLLARS for less than one hour's work! And yes, I'll be flying in First Class as usual, in unbelievable luxury, with a flat bed! I'll be checking out the indoor ski range, surfing on the sand dunes, visiting the tallest building in the world and the world's largest shopping mall, and luxuriating by the pool at my five star hotel. And yes, I will send pictures!"
+}
+###
+
+PUT http://localhost:8080/profile/experience/63dddfb16d67ea2e63f42907
+Content-Type: application/json
+
+{
+  "title": "Host",
+  "venue": "Park Tavern",
+  "content": "Host comedy show monthly"
 }

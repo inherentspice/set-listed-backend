@@ -3,13 +3,13 @@ const Featured = require("../models/featured");
 const Experience = require("../models/experience");
 const Award = require("../models/award");
 const Skill = require("../models/skill");
-const Post = require("../models/post");
+const About = require("../models/about");
 
 exports.getProfileCard = async (req, res) => {
   let id = req.params.id;
 
   try {
-    const profileCard = await ProfileCard.findById(id);
+    const profileCard = await ProfileCard.find({user: id});
     res.status(200).json({profileCard: profileCard});
   } catch (err) {
     console.log(err);
@@ -33,8 +33,15 @@ exports.modifyBackgroundPic = (req, res) => {
   return
 }
 
-exports.modifyAbout = (req, res) => {
-  return
+exports.modifyAbout = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const about = await About.findOneAndUpdate({user: userId}, {content: req.body.content}, { new: true })
+    res.status(200).json({about: about});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.modifyFeatured = (req, res) => {

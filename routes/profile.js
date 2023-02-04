@@ -6,10 +6,10 @@ const postController = require("../controllers/postController");
 const singleUploadCtrl = require("../middleware/multer");
 
 router.get("/:id", profileController.getProfile);
-router.put("/hero", profileController.modifyHero);
-router.put("/profilepicture", singleUploadCtrl, profileController.modifyProfilePic);
-router.put("/backgroundpicture", singleUploadCtrl, profileController.modifyBackgroundPic);
-router.put("/about", profileController.modifyAbout);
+router.put("/hero/:id", profileController.modifyHero);
+router.put("/profilepicture/:id", singleUploadCtrl, profileController.modifyProfilePic);
+router.put("/backgroundpicture/:id", singleUploadCtrl, profileController.modifyBackgroundPic);
+router.put("/about/:id", profileController.modifyAbout);
 
 router.post("/featured", singleUploadCtrl, profileController.createFeatured);
 router.put("/featured/:id", profileController.modifyFeatured);

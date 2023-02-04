@@ -1,6 +1,7 @@
 const validator = require("validator");
 const passport = require("passport");
 const User = require("../models/user");
+const About = require("../models/about");
 const ProfileCard = require("../models/profile-card");
 
 exports.postLogin = (req, res) => {
@@ -98,6 +99,13 @@ exports.postSignup = async (req, res, next) => {
     })
 
     await userProfile.save()
+
+    const userAbout = new About({
+      user: user.id,
+      content: ""
+    })
+
+    await userAbout.save()
 
     res.status(200).json({ user: user.id });
   } catch (err) {
