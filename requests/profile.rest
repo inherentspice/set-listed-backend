@@ -79,3 +79,17 @@ Content-Type: application/json
   "venue": "Park Tavern",
   "content": "Host comedy show monthly",
 }
+
+###
+PUT http://localhost:8080/profile/hero/63dddee66d67ea2e63f428f1
+Content-Type: application/json
+
+{
+  "firstName": "George",
+  "lastName": "Castles",
+  "tagline": "The show didn't get canceled, I quit.",
+  "city": "Bangkok",
+  "country": "Thailand",
+  "socials": ["@GeorgeCastles1", "@GeorgeCastles1", "@GeorgeCastles1"]
+
+}

@@ -23,12 +23,33 @@ exports.getProfile = (req, res) => {
   return
 }
 
-exports.modifyHero = (req, res) => {
-  return
+exports.modifyHero = async (req, res, next) => {
+  const userId = req.params.id;
+  const body = req.body;
+
+  if (!body) {
+    return res.status(406).json({error: "Missing information!"});
+  }
+
+  try {
+    const heroes = await ProfileCard.find({user: userId});
+    const hero = heroes[0];
+    hero.firstName = body.firstName;
+    hero.lastName = body.lastName;
+    hero.tagline = body.tagline;
+    hero.city = body.city;
+    hero.country = body.country;
+    hero.socials = body.socials;
+    await hero.save();
+    res.status(200).json({profileCard: hero});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.modifyProfilePic = async (req, res) => {
-  let userId = req.params.id;
+  const userId = req.params.id;
   const body = req.file;
 
   if (!body) {
@@ -36,7 +57,8 @@ exports.modifyProfilePic = async (req, res) => {
   }
 
   try {
-    const currentPic = await ProfileCard.find({ user: userId });
+    const currentPics = await ProfileCard.find({ user: userId });
+    let currentPic = currentPics[0];
     if (currentPic.cloudinaryId) {
       await cloudinaryDelete(currentPic.cloudinaryId);
     }
@@ -63,7 +85,8 @@ exports.modifyBackgroundPic = async (req, res) => {
   }
 
   try {
-    const currentBackgroundPic = await ProfileCard.find({ user: userId });
+    const currentBackgroundPics = await ProfileCard.find({ user: userId });
+    let currentBackgroundPic = currentBackgroundPics[0]
     if (currentBackgroundPic.backgroundCloudinaryId) {
       await cloudinaryDelete(currentBackgroundPic.backgroundCloudinaryId)
     }
@@ -100,11 +123,11 @@ exports.modifyFeatured = (req, res) => {
 exports.modifyExperience = async (req, res) => {
   const experienceId = req.params.id;
   try {
-    title = req.body.title;
-    venue = req.body.venue;
-    content = req.body.content;
-    dateStart = req.body.dateStart ? req.body.dateStart : undefined;
-    dateEnd = req.body.dateEnd ? req.body.dateEnd : undefined;
+    const title = req.body.title;
+    const venue = req.body.venue;
+    const content = req.body.content;
+    const dateStart = req.body.dateStart ? req.body.dateStart : undefined;
+    const dateEnd = req.body.dateEnd ? req.body.dateEnd : undefined;
     const experience = await Experience.findByIdAndUpdate(experienceId, {
       title,
       venue,

@@ -36,9 +36,17 @@ const ProfileCardSchema = new Schema({
     type: String,
     required: false
   },
-  location: {
+  city: {
     type: String,
     required: false
+  },
+  country: {
+    type: String,
+    required: false
+  },
+  socials: {
+    type: Array,
+    required: false,
   },
   userProfileViews: {
     type: Number,
