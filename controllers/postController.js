@@ -38,7 +38,18 @@ exports.modifyPost = async (req, res) => {
   try{
     const post = await Post.findByIdAndUpdate(postId, { content: req.body.content }, { new: true });
     res.status(200).json({ post: post });
-  } catch (err){
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
+exports.modifyPostLikes = async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const post = await Post.findByIdAndUpdate(postId, {$inc: { likes: 1}}, {new: true});
+    res.status(200).json({post: post});
+  } catch (err) {
     console.log(err);
     next(err);
   }

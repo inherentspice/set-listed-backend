@@ -31,5 +31,7 @@ router.delete("/skill/:id", profileController.deleteSkill);
 router.post("/post", postController.createPost);
 router.put("/post/:id", postController.modifyPost);
 router.delete("/post/:id", postController.deletePost);
+router.put("/post/likes/:id", postController.modifyPostLikes);
+
 
 module.exports = router;
