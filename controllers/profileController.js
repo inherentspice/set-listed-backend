@@ -69,7 +69,7 @@ exports.modifyProfilePic = async (req, res) => {
     currentPic.image = uploadResult.secure_url;
     currentPic.cloudinaryId = uploadResult.public_id;
 
-    await currentPic.save()
+    await currentPic.save();
     res.status(200).json({profileCard: currentPic});
   } catch (err) {
     console.log(err);
@@ -118,7 +118,6 @@ exports.modifyAbout = async (req, res) => {
 
 exports.modifyFeatured = async (req, res) => {
   const featureId = req.params.id;
-
   try {
     const title = req.body.title;
     const content = req.body.content;
@@ -127,6 +126,34 @@ exports.modifyFeatured = async (req, res) => {
       content
     }, {new: true});
     res.status(200).json({featured: featured});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
+exports.modifyFeaturedImage = async (req, res) => {
+  const featuredId = req.params.id;
+  const body = req.file;
+
+  if (!body) {
+    return res.status(406),json({error: "Missing img file!"});
+  }
+
+  try {
+    const currentPic = await Featured.findById(featuredId);
+    if (currentPic.cloudinaryId) {
+      await cloudinaryDelete(currentPic.cloudinaryId);
+    }
+
+    const file64 = formatBufferTo64(body);
+    const uploadResult = await cloudinaryUpload(file64.content);
+
+    currentPic.image = uploadResult.secure_url;
+    currentPic.cloudinaryId = uploadResult.public_id;
+
+    await currentPic.save();
+    res.status(200).json({featured: currentPic});
   } catch (err) {
     console.log(err);
     next(err);
