@@ -97,3 +97,8 @@ Content-Type: application/json
   "socials": ["@GeorgeCastles1", "@GeorgeCastles1", "@GeorgeCastles1"]
 
 }
+
+###
+
+GET http://localhost:8080/profile/63dddee66d67ea2e63f428f1
+Content-Type: application/json
