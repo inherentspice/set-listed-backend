@@ -116,8 +116,21 @@ exports.modifyAbout = async (req, res) => {
   }
 }
 
-exports.modifyFeatured = (req, res) => {
-  return
+exports.modifyFeatured = async (req, res) => {
+  const featureId = req.params.id;
+
+  try {
+    const title = req.body.title;
+    const content = req.body.content;
+    const featured = await Featured.findByIdAndUpdate(featureId, {
+      title,
+      content
+    }, {new: true});
+    res.status(200).json({featured: featured});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.modifyExperience = async (req, res) => {
