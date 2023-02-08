@@ -63,6 +63,10 @@ Content-Type: application/json
 
 ###
 
+PUT http://localhost:8080/profile/post/likes/63dddf806d67ea2e63f42904
+
+###
+
 PUT http://localhost:8080/profile/about/63dddee66d67ea2e63f428f1
 Content-Type: application/json
 
