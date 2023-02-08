@@ -4,6 +4,7 @@ const Experience = require("../models/experience");
 const Award = require("../models/award");
 const Skill = require("../models/skill");
 const About = require("../models/about");
+const Post = require("../models/post")
 const formatBufferTo64 = require("../middleware/data-uri");
 const { cloudinaryUpload, cloudinaryDelete } = require("../middleware/cloudinary");
 
@@ -19,8 +20,31 @@ exports.getProfileCard = async (req, res) => {
   }
 }
 
-exports.getProfile = (req, res) => {
-  return
+exports.getProfile = async (req, res) => {
+  let id = req.params.id;
+
+  try {
+    const about = await About.find({user: id});
+    const award = await Award.find({user: id});
+    const experience = await Experience.find({user: id});
+    const featured = await Featured.find({user: id});
+    const post = await Post.find({user: id});
+    const profileCard = await ProfileCard.find({user: id});
+    const skill = await Skill.find({user: id});
+    res.status(200).json({
+      about: about,
+      award: award,
+      experience: experience,
+      featured: featured,
+      post: post,
+      profileCard: profileCard,
+      skill: skill
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+
 }
 
 exports.modifyHero = async (req, res, next) => {
