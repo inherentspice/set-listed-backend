@@ -6,7 +6,7 @@ const Skill = require("../models/skill");
 const About = require("../models/about");
 const Post = require("../models/post")
 const formatBufferTo64 = require("../middleware/data-uri");
-const { cloudinaryUpload, cloudinaryDelete } = require("../middleware/cloudinary");
+const cloud = require("../middleware/cloudinary");
 
 exports.getProfileCard = async (req, res) => {
   let id = req.params.id;
@@ -84,15 +84,14 @@ exports.modifyProfilePic = async (req, res) => {
     const currentPics = await ProfileCard.find({ user: userId });
     let currentPic = currentPics[0];
     if (currentPic.cloudinaryId) {
-      await cloudinaryDelete(currentPic.cloudinaryId);
+      await cloud.cloudinaryDelete(currentPic.cloudinaryId);
     }
 
     const file64 = formatBufferTo64(body);
-    const uploadResult = await cloudinaryUpload(file64.content);
+    const uploadResult = await cloud.cloudinaryUpload(file64.content);
 
     currentPic.image = uploadResult.secure_url;
     currentPic.cloudinaryId = uploadResult.public_id;
-
     await currentPic.save();
     res.status(200).json({profileCard: currentPic});
   } catch (err) {
@@ -112,11 +111,11 @@ exports.modifyBackgroundPic = async (req, res) => {
     const currentBackgroundPics = await ProfileCard.find({ user: userId });
     let currentBackgroundPic = currentBackgroundPics[0]
     if (currentBackgroundPic.backgroundCloudinaryId) {
-      await cloudinaryDelete(currentBackgroundPic.backgroundCloudinaryId)
+      await cloud.cloudinaryDelete(currentBackgroundPic.backgroundCloudinaryId)
     }
 
     const file64 = formatBufferTo64(body);
-    const uploadResult = await cloudinaryUpload(file64.content);
+    const uploadResult = await cloud.cloudinaryUpload(file64.content);
 
     currentBackgroundPic.backgroundImage = uploadResult.secure_url;
     currentBackgroundPic.backgroundCloudinaryId = uploadResult.public_id;
@@ -167,11 +166,11 @@ exports.modifyFeaturedImage = async (req, res) => {
   try {
     const currentPic = await Featured.findById(featuredId);
     if (currentPic.cloudinaryId) {
-      await cloudinaryDelete(currentPic.cloudinaryId);
+      await cloud.cloudinaryDelete(currentPic.cloudinaryId);
     }
 
     const file64 = formatBufferTo64(body);
-    const uploadResult = await cloudinaryUpload(file64.content);
+    const uploadResult = await cloud.cloudinaryUpload(file64.content);
 
     currentPic.image = uploadResult.secure_url;
     currentPic.cloudinaryId = uploadResult.public_id;
@@ -235,20 +234,20 @@ exports.createFeatured = async (req, res) => {
       return res.status(406).json({error: "Missing img file!"});
     }
 
-    if (!body.req.title) {
+    if (!req.body.title) {
       return res.status(406).json({error: "Missing title!"});
     }
 
-    if (!body.req.content) {
-      return res.status(406).json({error: "Missing congtent!"});
+    if (!req.body.content) {
+      return res.status(406).json({error: "Missing content!"});
     }
 
     const file64 = formatBufferTo64(body);
-    const uploadResult = await cloudinaryUpload(file64.content);
+    const uploadResult = await cloud.cloudinaryUpload(file64.content);
 
     const featured = new Featured({
       title: req.body.title,
-      imageURL: uploadResult.secure_url,
+      image: uploadResult.secure_url,
       cloudinaryId: uploadResult.public_id,
       content: req.body.content,
       user: req.body.user
@@ -256,6 +255,7 @@ exports.createFeatured = async (req, res) => {
 
 
     const newFeatured = await featured.save();
+    console.log(newFeatured);
     res.status(200).json({featured: newFeatured});
   } catch (err) {
     console.log(err);
