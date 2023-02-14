@@ -9,11 +9,11 @@ cloudinary.config({
 
 
 
-const cloudinaryUpload = file => cloudinary.uploader.upload(file, {folder: "Set-Listed"})
+const cloudinaryUpload = file => cloudinary.uploader.upload(file, {folder: "Set-Listed"});
 
 const cloudinaryDelete = publicId => cloudinary.uploader.destroy(publicId);
 
-exports.module = {
+module.exports = {
   cloudinaryUpload,
   cloudinaryDelete
 }
