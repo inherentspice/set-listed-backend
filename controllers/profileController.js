@@ -109,7 +109,7 @@ exports.modifyBackgroundPic = async (req, res) => {
 
   try {
     const currentBackgroundPics = await ProfileCard.find({ user: userId });
-    let currentBackgroundPic = currentBackgroundPics[0]
+    let currentBackgroundPic = currentBackgroundPics[0];
     if (currentBackgroundPic.backgroundCloudinaryId) {
       await cloud.cloudinaryDelete(currentBackgroundPic.backgroundCloudinaryId)
     }
@@ -119,7 +119,6 @@ exports.modifyBackgroundPic = async (req, res) => {
 
     currentBackgroundPic.backgroundImage = uploadResult.secure_url;
     currentBackgroundPic.backgroundCloudinaryId = uploadResult.public_id;
-
     await currentBackgroundPic.save();
     res.status(200).json({profileCard: currentBackgroundPic});
   } catch (err) {
@@ -191,12 +190,14 @@ exports.modifyExperience = async (req, res) => {
     const content = req.body.content;
     const dateStart = req.body.dateStart ? req.body.dateStart : undefined;
     const dateEnd = req.body.dateEnd ? req.body.dateEnd : undefined;
+    const location = req.body.location ? req.body.location : undefined;
     const experience = await Experience.findByIdAndUpdate(experienceId, {
       title,
       venue,
       content,
       dateStart,
       dateEnd,
+      location
     }, { new: true });
     res.status(200).json({experience: experience});
   } catch (err) {
@@ -255,7 +256,6 @@ exports.createFeatured = async (req, res) => {
 
 
     const newFeatured = await featured.save();
-    console.log(newFeatured);
     res.status(200).json({featured: newFeatured});
   } catch (err) {
     console.log(err);
@@ -290,8 +290,8 @@ exports.createExperience = async (req, res) => {
     title: newExperienceInfo.title,
     venue: newExperienceInfo.venue,
     content: newExperienceInfo.content,
-    dateStart: newExperienceInfo.dateStart ? newExperienceInfo.dateStart : undefined,
-    dateEnd: newExperienceInfo.dateEnd ? newExperienceInfo.dateEnd : undefined
+    dateStart: newExperienceInfo.dateStart ? new Date(Date.parse(newExperienceInfo.dateStart)) : undefined,
+    dateEnd: newExperienceInfo.dateEnd ? new Date(Date.parse(newExperienceInfo.dateEnd)) : undefined
   });
 
   try {
