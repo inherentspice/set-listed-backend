@@ -26,6 +26,10 @@ const ExperienceSchema = new Schema({
   dateEnd: {
     type: Date,
     required: false
+  },
+  location: {
+    type: String,
+    required: false
   }
 });
 

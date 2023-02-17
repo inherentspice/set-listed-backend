@@ -12,7 +12,7 @@ router.put("/backgroundpicture/:id", singleUploadCtrl, profileController.modifyB
 router.put("/about/:id", profileController.modifyAbout);
 
 router.post("/featured", singleUploadCtrl, profileController.createFeatured);
-router.put("featured/image/:id", singleUploadCtrl, profileController.modifyFeaturedImage);
+router.put("/featured/image/:id", singleUploadCtrl, profileController.modifyFeaturedImage);
 router.put("/featured/:id", profileController.modifyFeatured);
 router.delete("/featured/:id", profileController.deleteFeatured);
 
