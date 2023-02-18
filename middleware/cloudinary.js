@@ -11,19 +11,20 @@ const cloudinaryUploadLarge = file => cloudinary.uploader.upload(file, {
   folder: "Set-Listed",
   width: 725,
   height: 250,
-  crop:"fill"
+  crop:"scale"
 });
 
 const cloudinaryUpload = file => cloudinary.uploader.upload(file, {
   folder: "Set-Listed",
-  width: 180,
-  height: 180,
-  crop:"fill"
+  width: 250,
+  height: 250,
+  crop:"scale"
 });
 
 const cloudinaryDelete = publicId => cloudinary.uploader.destroy(publicId);
 
 module.exports = {
   cloudinaryUpload,
+  cloudinaryUploadLarge,
   cloudinaryDelete
 }
