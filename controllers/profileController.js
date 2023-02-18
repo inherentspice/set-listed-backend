@@ -363,18 +363,63 @@ exports.createSkill = async (req, res) => {
 }
 
 
-exports.deleteFeatured = (req, res) => {
-  return
+exports.deleteFeatured = async (req, res) => {
+  try {
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const FeaturedId = req.params.id;
+    const currentPic = Featured.findById(featuredId);
+
+    if (currentPic.cloudinaryId) {
+      await cloud.cloudinaryDelete(currentPic.cloudinaryId);
+      }
+    await Featured.findByIdAndDelete(FeaturedId);
+
+  } catch(err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-exports.deleteExperience = (req, res) => {
-  return
+exports.deleteExperience = async (req, res) => {
+  try {
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const ExperienceId = req.params.id;
+    await Experience.findByIdAndDelete(ExperienceId);
+
+  } catch(err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-exports.deleteAward = (req, res) => {
-  return
+exports.deleteAward = async (req, res) => {
+  try {
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const AwardId = req.params.id;
+    await Award.findByIdAndDelete(AwardId);
+
+  } catch(err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-exports.deleteSkill = (req, res) => {
-  return
+exports.deleteSkill = async (req, res) => {
+  try {
+    if (!req.body) {
+      return res.status(400).json({error: "Invalid request body"});
+    }
+    const SkillId = req.params.id;
+    await Skill.findByIdAndDelete(SkillId);
+
+  } catch(err) {
+    console.log(err);
+    next(err);
+  }
 }
