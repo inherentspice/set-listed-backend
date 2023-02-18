@@ -365,9 +365,6 @@ exports.createSkill = async (req, res) => {
 
 exports.deleteFeatured = async (req, res) => {
   try {
-    if (!req.body) {
-      return res.status(400).json({error: "Invalid request body"});
-    }
     const FeaturedId = req.params.id;
     const currentPic = Featured.findById(featuredId);
 
@@ -384,9 +381,6 @@ exports.deleteFeatured = async (req, res) => {
 
 exports.deleteExperience = async (req, res) => {
   try {
-    if (!req.body) {
-      return res.status(400).json({error: "Invalid request body"});
-    }
     const ExperienceId = req.params.id;
     await Experience.findByIdAndDelete(ExperienceId);
 
@@ -398,9 +392,6 @@ exports.deleteExperience = async (req, res) => {
 
 exports.deleteAward = async (req, res) => {
   try {
-    if (!req.body) {
-      return res.status(400).json({error: "Invalid request body"});
-    }
     const AwardId = req.params.id;
     await Award.findByIdAndDelete(AwardId);
 
@@ -412,9 +403,6 @@ exports.deleteAward = async (req, res) => {
 
 exports.deleteSkill = async (req, res) => {
   try {
-    if (!req.body) {
-      return res.status(400).json({error: "Invalid request body"});
-    }
     const SkillId = req.params.id;
     await Skill.findByIdAndDelete(SkillId);
 
