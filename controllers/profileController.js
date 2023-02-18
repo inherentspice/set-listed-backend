@@ -115,7 +115,7 @@ exports.modifyBackgroundPic = async (req, res) => {
     }
 
     const file64 = formatBufferTo64(body);
-    const uploadResult = await cloud.cloudinaryUpload(file64.content);
+    const uploadResult = await cloud.cloudinaryUploadLarge(file64.content);
 
     currentBackgroundPic.backgroundImage = uploadResult.secure_url;
     currentBackgroundPic.backgroundCloudinaryId = uploadResult.public_id;
