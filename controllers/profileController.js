@@ -372,6 +372,7 @@ exports.deleteFeatured = async (req, res) => {
       await cloud.cloudinaryDelete(currentPic.cloudinaryId);
       }
     await Featured.findByIdAndDelete(FeaturedId);
+    return res.status(200).json({message: "successfully deleted!"});
 
   } catch(err) {
     console.log(err);
@@ -383,6 +384,7 @@ exports.deleteExperience = async (req, res) => {
   try {
     const ExperienceId = req.params.id;
     await Experience.findByIdAndDelete(ExperienceId);
+    return res.status(200).json({message: "successfully deleted!"});
 
   } catch(err) {
     console.log(err);
@@ -394,7 +396,7 @@ exports.deleteAward = async (req, res) => {
   try {
     const AwardId = req.params.id;
     await Award.findByIdAndDelete(AwardId);
-
+    return res.status(200).json({message: "successfully deleted!"});
   } catch(err) {
     console.log(err);
     next(err);
@@ -405,7 +407,7 @@ exports.deleteSkill = async (req, res) => {
   try {
     const SkillId = req.params.id;
     await Skill.findByIdAndDelete(SkillId);
-
+    return res.status(200).json({message: "successfully deleted!"});
   } catch(err) {
     console.log(err);
     next(err);
