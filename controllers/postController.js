@@ -55,6 +55,13 @@ exports.modifyPostLikes = async (req, res) => {
   }
 }
 
-exports.deletePost = (req, res) => {
-  return
+exports.deletePost = async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const PostId = req.params.id;
+    await Post.findByIdAndDelete(PostId);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }

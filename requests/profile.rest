@@ -102,3 +102,23 @@ Content-Type: application/json
 
 GET http://localhost:8080/profile/63dddee66d67ea2e63f428f1
 Content-Type: application/json
+
+###
+
+DELETE http://localhost:8080/profile/skill/63dddf3f6d67ea2e63f428fc
+Content-Type: application/json
+
+###
+
+DELETE http://localhost:8080/profile/award/63dddf5b6d67ea2e63f428ff
+Content-Type: application/json
+
+###
+
+DELETE http://localhost:8080/profile/post/63dddf806d67ea2e63f42904
+Content-Type: application/json
+
+###
+
+DELETE http://localhost:8080/profile/experience/63dddfb16d67ea2e63f42907
+Content-Type: application/json

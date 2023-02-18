@@ -115,7 +115,7 @@ exports.modifyBackgroundPic = async (req, res) => {
     }
 
     const file64 = formatBufferTo64(body);
-    const uploadResult = await cloud.cloudinaryUpload(file64.content);
+    const uploadResult = await cloud.cloudinaryUploadLarge(file64.content);
 
     currentBackgroundPic.backgroundImage = uploadResult.secure_url;
     currentBackgroundPic.backgroundCloudinaryId = uploadResult.public_id;
@@ -363,18 +363,51 @@ exports.createSkill = async (req, res) => {
 }
 
 
-exports.deleteFeatured = (req, res) => {
-  return
+exports.deleteFeatured = async (req, res) => {
+  try {
+    const FeaturedId = req.params.id;
+    const currentPic = Featured.findById(featuredId);
+
+    if (currentPic.cloudinaryId) {
+      await cloud.cloudinaryDelete(currentPic.cloudinaryId);
+      }
+    await Featured.findByIdAndDelete(FeaturedId);
+
+  } catch(err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-exports.deleteExperience = (req, res) => {
-  return
+exports.deleteExperience = async (req, res) => {
+  try {
+    const ExperienceId = req.params.id;
+    await Experience.findByIdAndDelete(ExperienceId);
+
+  } catch(err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-exports.deleteAward = (req, res) => {
-  return
+exports.deleteAward = async (req, res) => {
+  try {
+    const AwardId = req.params.id;
+    await Award.findByIdAndDelete(AwardId);
+
+  } catch(err) {
+    console.log(err);
+    next(err);
+  }
 }
 
-exports.deleteSkill = (req, res) => {
-  return
+exports.deleteSkill = async (req, res) => {
+  try {
+    const SkillId = req.params.id;
+    await Skill.findByIdAndDelete(SkillId);
+
+  } catch(err) {
+    console.log(err);
+    next(err);
+  }
 }
