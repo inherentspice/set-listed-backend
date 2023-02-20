@@ -1,7 +1,13 @@
 const Post = require("../models/post");
 
-exports.getFeed = (req, res) => {
-  console.log("here");
+exports.getFeed = async (req, res) => {
+  try {
+    const postFeed = await Post.find().sort({createdAt: -1});
+    res.status(200).json({posts: postFeed});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.createPost = async (req, res) => {

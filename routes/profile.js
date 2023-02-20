@@ -6,6 +6,7 @@ const postController = require("../controllers/postController");
 const singleUploadCtrl = require("../middleware/multer");
 
 router.get("/:id", profileController.getProfile);
+router.get("/profilecard/:id", profileController.getProfileCard);
 router.put("/hero/:id", profileController.modifyHero);
 router.put("/profilepicture/:id", singleUploadCtrl, profileController.modifyProfilePic);
 router.put("/backgroundpicture/:id", singleUploadCtrl, profileController.modifyBackgroundPic);
