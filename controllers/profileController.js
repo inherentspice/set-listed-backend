@@ -365,13 +365,14 @@ exports.createSkill = async (req, res) => {
 
 exports.deleteFeatured = async (req, res) => {
   try {
-    const FeaturedId = req.params.id;
+    const featuredId = req.params.id;
     const currentPic = Featured.findById(featuredId);
 
     if (currentPic.cloudinaryId) {
       await cloud.cloudinaryDelete(currentPic.cloudinaryId);
-      }
-    await Featured.findByIdAndDelete(FeaturedId);
+    }
+
+    await Featured.findByIdAndDelete(featuredId);
     return res.status(200).json({message: "successfully deleted!"});
 
   } catch(err) {
