@@ -7,11 +7,11 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
-  likes: {
-    type: Number,
-    required: true,
-    default: 0
-  },
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    default: []
+  }],
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
