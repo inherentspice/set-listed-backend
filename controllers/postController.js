@@ -27,7 +27,8 @@ exports.createPost = async (req, res) => {
 
   const post = new Post({
     user: newPostInfo.user,
-    content: newPostInfo.content
+    content: newPostInfo.content,
+    likes: []
   });
 
   try {
@@ -56,7 +57,6 @@ exports.modifyPostLikes = async (req, res) => {
   try {
     const post = await Post.findById(postId);
     const likeSearch = post.likes.filter((user) => user.valueOf() !== likeUser);
-    console.log(likeSearch);
     if (likeSearch.length === post.likes.length) {
       post.likes.push(likeUser);
       await post.save();
