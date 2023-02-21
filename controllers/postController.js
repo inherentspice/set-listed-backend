@@ -52,8 +52,18 @@ exports.modifyPost = async (req, res) => {
 
 exports.modifyPostLikes = async (req, res) => {
   const postId = req.params.id;
+  const likeUser = req.body.user;
   try {
-    const post = await Post.findByIdAndUpdate(postId, {$inc: { likes: 1}}, {new: true});
+    const post = await Post.findById(postId);
+    const likeSearch = post.likes.filter((user) => user.valueOf() !== likeUser);
+    console.log(likeSearch);
+    if (likeSearch.length === post.likes.length) {
+      post.likes.push(likeUser);
+      await post.save();
+    } else {
+      post.likes = likeSearch;
+      await post.save();
+    }
     res.status(200).json({post: post});
   } catch (err) {
     console.log(err);
