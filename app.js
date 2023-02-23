@@ -49,7 +49,7 @@ app.use(passport.session());
 
 app.use('/', indexRouter);
 // app.use('/gigs', gigsRouter);
-// app.use('/messaging', messagingRouter);
+app.use('/messaging', messagingRouter);
 // app.use('/network', networkRouter);
 // app.use('/notifications', notificationsRouter);
 app.use('/profile', profileRouter);
