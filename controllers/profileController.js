@@ -44,7 +44,18 @@ exports.getProfile = async (req, res) => {
     console.log(err);
     next(err);
   }
+}
 
+exports.modifyProfileViews = async (req, res, next) => {
+  const userId = req.params.id;
+
+  try {
+    const updatedProfileCard = await ProfileCard.findOneAndUpdate({user: userId}, {$inc: {userProfileViews: 1}}, {new: true})
+    res.status(200).json({profileCard: updatedProfileCard});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 }
 
 exports.modifyHero = async (req, res, next) => {

@@ -6,6 +6,7 @@ const postController = require("../controllers/postController");
 const singleUploadCtrl = require("../middleware/multer");
 
 router.get("/:id", profileController.getProfile);
+router.put("/profileviews/:id", profileController.modifyProfileViews);
 router.get("/profilecard/:id", profileController.getProfileCard);
 router.put("/hero/:id", profileController.modifyHero);
 router.put("/profilepicture/:id", singleUploadCtrl, profileController.modifyProfilePic);
@@ -33,6 +34,5 @@ router.post("/post", postController.createPost);
 router.put("/post/:id", postController.modifyPost);
 router.delete("/post/:id", postController.deletePost);
 router.put("/post/likes/:id", postController.modifyPostLikes);
-
 
 module.exports = router;
