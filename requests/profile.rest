@@ -117,6 +117,10 @@ Content-Type: application/json
 
 ###
 
+PUT http://localhost:8080/profile/profileviews/63dddee66d67ea2e63f428f1
+Content-Type: application/json
+
+###
 DELETE http://localhost:8080/profile/skill/63dddf3f6d67ea2e63f428fc
 Content-Type: application/json
 
