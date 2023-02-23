@@ -28,7 +28,7 @@ exports.getProfile = async (req, res) => {
     const award = await Award.find({user: id});
     const experience = await Experience.find({user: id});
     const featured = await Featured.find({user: id});
-    const post = await Post.find({user: id});
+    const post = await Post.find({user: id}).sort({createdAt: -1});
     const profileCard = await ProfileCard.find({user: id});
     const skill = await Skill.find({user: id});
     res.status(200).json({
