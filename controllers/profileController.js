@@ -51,7 +51,7 @@ exports.modifyProfileViews = async (req, res, next) => {
 
   try {
     const updatedProfileCard = await ProfileCard.findOneAndUpdate({user: userId}, {$inc: {userProfileViews: 1}}, {new: true})
-    res.status(200).json({profileCard: updatedProfileCard});
+    res.status(200).json({message: "userProfileViews incremented by one!"});
   } catch (err) {
     console.log(err);
     next(err);
