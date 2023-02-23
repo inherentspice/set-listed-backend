@@ -1,4 +1,5 @@
 const Post = require("../models/post");
+const ProfileCard = require("../models/profile-card");
 
 exports.getFeed = async (req, res) => {
   try {
@@ -59,9 +60,11 @@ exports.modifyPostLikes = async (req, res) => {
     const likeSearch = post.likes.filter((user) => user.valueOf() !== likeUser);
     if (likeSearch.length === post.likes.length) {
       post.likes.push(likeUser);
+      await ProfileCard.findOneAndUpdate({user: post.user}, {$inc: {userPostImpressions: 1}});
       await post.save();
     } else {
       post.likes = likeSearch;
+      await ProfileCard.findOneAndUpdate({user: post.user}, {$inc: {userPostImpressions: -1}});
       await post.save();
     }
     res.status(200).json({post: post});
