@@ -1,32 +1,20 @@
-const socketIO = require('socket.io');
-const Room = require('../models/room');
-const Message = require('../models/messages');
-const ProfileCard = require('../models/profile-card');
-const http = require('http');
-const express = require('express');
-const app = express();
+const Room = require("../models/room");
+const Message = require("../models/messages");
+const ProfileCard = require("../models/profile-card");
 
 
-
-// const rooms = await Room.find({ participants: { $in: [userId] } })
-//   .populate('participants', 'username') // Populate the user fields
-//   .populate({
-//     path: 'messages',
-//     populate: { path: 'author', select: 'username' } // Populate the author field of each message
-//   });
-
-
-// Route for getting all messages in a chat room
 exports.getMessages = async (req, res) => {
   try {
-    const messages = await Message.find({ room: req.params.id }).sort({ createdAt: "asc" });
+    const messages = await Message.find({ room: req.params.id })
+      .sort({ createdAt: "asc" })
+      .populate("user", "firstName lastName")
+      .populate("recipient", "firstName lastName");
     res.status(200).json(messages);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server Error" });
   }
 };
-
 
 
 exports.createRoom = async (req, res) => {
@@ -39,7 +27,7 @@ exports.createRoom = async (req, res) => {
     });
 
     if (existingRoom) {
-      console.log('Found existing room:', existingRoom.id);
+      console.log("Found existing room:", existingRoom.id);
       res.status(200).json({room: existingRoom});
       return;
     }
@@ -50,22 +38,13 @@ exports.createRoom = async (req, res) => {
     });
 
     const newRoom = await room.save();
-    console.log('New room created:', newRoom.id);
+    console.log("New room created:", newRoom.id);
     res.status(200).json({room: newRoom});
   } catch (err) {
     console.error(err);
-    res.status(500).send('Error creating room');
+    res.status(500).send("Error creating room");
   }
 }
-
-// exports.getRoomInfo = async (req, res) => {
-//   try {
-//     const room = await Room.findById(req.params.id);
-//     res.status(200).json({room: room});
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
 
 exports.getUserRooms = async (req, res) => {
   try {
@@ -76,16 +55,19 @@ exports.getUserRooms = async (req, res) => {
     for (let i = 0; i < rooms.length; i++) {
       const otherUser = rooms[i].participants.filter(user => user.toString() !== userId)[0];
       const userProfileCard = await ProfileCard.findOne({user: {$ne: userId, $eq: otherUser.toString()} }).select("firstName lastName image");
-      const messages = await Message.find({ room: rooms[i].id }).sort({ createdAt: -1 }).limit(1);
-      console.log(messages);
+      const messages = await Message.find({ room: rooms[i].id })
+        .sort({ createdAt: -1 })
+        .limit(1)
+        .populate("user", "firstName lastName")
+        .populate("recipient", "firstName lastName");
       roomsWithProfileCard.push({ room: rooms[i], profileCard: userProfileCard, friendId: otherUser, messages});
     }
-
+    roomsWithProfileCard.sort((a, b) => b.room.modifiedAt - a.room.modifiedAt);
 
     res.status(200).json(roomsWithProfileCard);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error fetching rooms');
+    res.status(500).send("Error fetching rooms");
   }
 }
 
@@ -93,71 +75,26 @@ exports.deleteRoom = (req, res) => {
   return
 }
 
-// Handler for messaging page
-// router.get('/:roomID', (req, res) => {
-//   const { roomID } = req.params;
-//   const io = socketIO.listen(req.app);
-
-//   io.on('connection', (socket) => {
-//     console.log('Socket connected:', socket.id);
-
-//     // Join the socket room corresponding to the room ID
-//     socket.join(roomID);
-
-//     // Send room ID to client
-//     socket.emit('roomID', roomID);
-
-//     // Handle socket events here
-//     socket.on('message', (data) => {
-//       // Save message to database
-//       const message = new Message({
-//         room: roomID,
-//         sender: data.sender,
-//         recipient: data.recipient,
-//         content: data.message
-//       });
-
-//       message.save((err) => {
-//         if (err) console.error(err);
-//       });
-
-//       // Broadcast message to all clients in the room except the sender
-//       socket.broadcast.to(roomID).emit('message', {
-//         sender: data.sender,
-//         message: data.message
-//       });
-//     });
-
-//     socket.on('disconnect', () => {
-//       console.log('Socket disconnected:', socket.id);
-//     });
-//   });
-
-//   // Render the messaging page
-//   res.render('messaging', { roomID });
-// });
 
 
-
-
-// router.delete('/:id', (req, res) => {
+// router.delete("/:id", (req, res) => {
 //   const roomId = req.params.id;
 
 //   Room.findByIdAndDelete(roomId, (err, deletedRoom) => {
 //     if (err) {
 //       console.error(err);
-//       res.status(500).send('Error deleting room');
+//       res.status(500).send("Error deleting room");
 //     } else {
-//       console.log('Room deleted:', deletedRoom._id);
+//       console.log("Room deleted:", deletedRoom._id);
 
 //       // Delete all messages associated with the room
 //       Message.deleteMany({ room: deletedRoom._id }, (err) => {
 //         if (err) {
 //           console.error(err);
-//           res.status(500).send('Error deleting messages');
+//           res.status(500).send("Error deleting messages");
 //         } else {
-//           console.log('Messages deleted for room:', deletedRoom._id);
-//           res.status(200).send('Room deleted');
+//           console.log("Messages deleted for room:", deletedRoom._id);
+//           res.status(200).send("Room deleted");
 //         }
 //       });
 //     }

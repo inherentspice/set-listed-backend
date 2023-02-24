@@ -1,5 +1,5 @@
 const express = require("express");
-require('dotenv').config();
+require("dotenv").config();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require("express-session");
@@ -7,9 +7,10 @@ const passport = require("passport");
 const MongoStore = require("connect-mongo")(session);
 const logger = require("morgan");
 const connectDB = require("./config/database");
-const http = require('http');
-const socketIO = require('socket.io');
+const http = require("http");
+const socketIO = require("socket.io");
 const Message = require("./models/messages");
+const Room = require("./models/room");
 
 
 const indexRouter = require("./routes/index");
@@ -55,12 +56,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.use('/', indexRouter);
-// app.use('/gigs', gigsRouter);
-app.use('/messaging', messagingRouter);
-// app.use('/network', networkRouter);
-// app.use('/notifications', notificationsRouter);
-app.use('/profile', profileRouter);
+app.use("/", indexRouter);
+// app.use("/gigs", gigsRouter);
+app.use("/messaging", messagingRouter);
+// app.use("/network", networkRouter);
+// app.use("/notifications", notificationsRouter);
+app.use("/profile", profileRouter);
 
 const server = http.createServer(app);
 
@@ -71,12 +72,11 @@ const io = socketIO(server, {
   }
 });
 
-io.on('connection', (socket) => {
-  console.log('Socket connected:', socket.id);
+io.on("connection", (socket) => {
+  console.log("Socket connected:", socket.id);
 
   // Handle socket events here
   socket.on("message", async (data) => {
-    console.log(data.recipient);
     try {
       // Save message to database
       const message = new Message({
@@ -85,25 +85,29 @@ io.on('connection', (socket) => {
         recipient: data.recipient,
         content: data.content
       });
-      const recievedMessage = await message.save();
 
-      console.log(recievedMessage);
+
+      const recievedMessage = await message.save()
+      const newMessage = await Message.findById(recievedMessage.id)
+        .populate("user", "firstName lastName")
+        .populate("recipient", "firstName lastName")
+
+      const room = await Room.findById(data.roomId);
+      room.modifiedAt = Date.now();
+      await room.save();
 
       // Broadcast message to all clients in the room except the sender
-      socket.broadcast.to(data.roomID).emit('message', {
-        sender: data.sender,
-        message: data.message
-      });
+      socket.broadcast.to(data.roomID).emit("message", {newMessage});
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   });
 
-  socket.on('disconnect', () => {
-    console.log('Socket disconnected:', socket.id);
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected:", socket.id);
   });
 });
 
 server.listen(process.env.PORT || 8080, () => {
-  console.log('Server running on port 8080');
+  console.log("Server running on port 8080");
 });
