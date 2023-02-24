@@ -15,55 +15,18 @@ const app = express();
 //     populate: { path: 'author', select: 'username' } // Populate the author field of each message
 //   });
 
-// exports.getMessages = async (req, res) => {
-//   const server = http.createServer(app);
 
-//   try {
-//     const { roomID } = req.params;
-//     const io = socketIO(server);
+// Route for getting all messages in a chat room
+exports.getMessages = async (req, res) => {
+  try {
+    const messages = await Message.find({ room: req.params.id }).sort({ createdAt: "asc" });
+    res.status(200).json(messages);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
 
-//     io.on('connection', (socket) => {
-//       console.log('Socket connected:', socket.id);
-
-//       // Join the socket room corresponding to the room ID
-//       socket.join(roomID);
-
-//       // Send room ID to client
-//       socket.emit('roomID', roomID);
-
-//       // Handle socket events here
-//       socket.on('message', async (data) => {
-//         try {
-//           // Save message to database
-//           const message = new Message({
-//             room: roomID,
-//             sender: data.sender,
-//             recipient: data.recipient,
-//             content: data.message
-//           });
-//           await message.save();
-
-//           // Broadcast message to all clients in the room except the sender
-//           socket.broadcast.to(roomID).emit('message', {
-//             sender: data.sender,
-//             message: data.message
-//           });
-//         } catch (error) {
-//           console.error(error);
-//         }
-//       });
-
-//       socket.on('disconnect', () => {
-//         console.log('Socket disconnected:', socket.id);
-//       });
-//     });
-
-//     res.status(200).send('Connected to socket server');
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Error connecting to socket server');
-//   }
-// };
 
 
 exports.createRoom = async (req, res) => {
