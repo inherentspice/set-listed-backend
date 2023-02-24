@@ -18,7 +18,8 @@ const ProfileCardSchema = new Schema({
   },
   image: {
     type: String,
-    require: true
+    require: true,
+    default: "https://res.cloudinary.com/dhptcrsjc/image/upload/v1674789718/Set-Listed/empty-profile-pic_b2hrxu.png"
   },
   cloudinaryId: {
     type: String,
@@ -26,7 +27,8 @@ const ProfileCardSchema = new Schema({
   },
   backgroundImage: {
     type: String,
-    require: false
+    require: false,
+    default: "https://res.cloudinary.com/dhptcrsjc/image/upload/v1675955714/Set-Listed/default-background_wyziyb.png"
   },
   backgroundCloudinaryId: {
     type: String,

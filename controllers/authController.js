@@ -80,6 +80,8 @@ exports.postSignup = async (req, res, next) => {
     const user = new User({
       email: req.body.email,
       password: req.body.password,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName
     });
 
     const existingUser = await User.findOne({ email: req.body.email });
@@ -95,6 +97,8 @@ exports.postSignup = async (req, res, next) => {
       lastName: req.body.lastName,
       user: user.id,
       image: "https://res.cloudinary.com/dhptcrsjc/image/upload/v1674789718/Set-Listed/empty-profile-pic_b2hrxu.png",
+      backgroundImage: "https://res.cloudinary.com/dhptcrsjc/image/upload/v1675955714/Set-Listed/default-background_wyziyb.png",
+      backgroundCloudinaryId: "/",
       cloudinaryId: "/"
     })
 
