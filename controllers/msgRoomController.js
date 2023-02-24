@@ -77,6 +77,7 @@ exports.getUserRooms = async (req, res) => {
       const otherUser = rooms[i].participants.filter(user => user.toString() !== userId)[0];
       const userProfileCard = await ProfileCard.findOne({user: {$ne: userId, $eq: otherUser.toString()} }).select("firstName lastName image");
       const messages = await Message.find({ room: rooms[i].id }).sort({ createdAt: -1 }).limit(1);
+      console.log(messages);
       roomsWithProfileCard.push({ room: rooms[i], profileCard: userProfileCard, friendId: otherUser, messages});
     }
 
