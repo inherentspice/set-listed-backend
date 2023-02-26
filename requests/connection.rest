@@ -17,7 +17,7 @@ POST http://localhost:8080/network/createConnection/63f364846ec43e5dbd149eba
 POST http://localhost:8080/network/createConnection/63f82858e14e567dcd9cbc80
 ###
 
-POST http://localhost:8080/network/acceptRequest/63f364846ec43e5dbd149eba
+PUT http://localhost:8080/network/acceptRequest/63f364846ec43e5dbd149eba
 Content-Type: application/json
 
 {
