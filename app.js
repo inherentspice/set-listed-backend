@@ -16,7 +16,7 @@ const Room = require("./models/room");
 const indexRouter = require("./routes/index");
 const gigsRouter = require("./routes/gigs");
 const messagingRouter = require("./routes/messaging");
-const networkRouter = require("./routes/messaging");
+const networkRouter = require("./routes/network");
 const notificationsRouter = require("./routes/notifications");
 const profileRouter = require("./routes/profile");
 
@@ -59,7 +59,7 @@ app.use(passport.session());
 app.use("/", indexRouter);
 // app.use("/gigs", gigsRouter);
 app.use("/messaging", messagingRouter);
-// app.use("/network", networkRouter);
+app.use("/network", networkRouter);
 // app.use("/notifications", notificationsRouter);
 app.use("/profile", profileRouter);
 

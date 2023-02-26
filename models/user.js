@@ -8,6 +8,7 @@ const UserSchema = new Schema({
   password: { type: String, required: true},
   firstName: { type: String, required: true},
   lastName: {type: String, required: true},
+  connection: {type: Schema.Types.ObjectId, required: false, ref: "Connection"}
 });
 
 // Password hash middleware

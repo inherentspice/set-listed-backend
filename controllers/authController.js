@@ -3,6 +3,7 @@ const passport = require("passport");
 const User = require("../models/user");
 const About = require("../models/about");
 const ProfileCard = require("../models/profile-card");
+const Connection = require("../models/connection")
 
 exports.postLogin = (req, res) => {
   const validationErrors = [];
@@ -90,7 +91,7 @@ exports.postSignup = async (req, res, next) => {
       return res.status(400).json({msg: "Account with that email address already exists."});
     }
 
-    await user.save()
+    const newUser = await user.save();
 
     const userProfile = new ProfileCard({
       firstName: req.body.firstName,
@@ -100,16 +101,28 @@ exports.postSignup = async (req, res, next) => {
       backgroundImage: "https://res.cloudinary.com/dhptcrsjc/image/upload/v1675955714/Set-Listed/default-background_wyziyb.png",
       backgroundCloudinaryId: "/",
       cloudinaryId: "/"
-    })
+    });
 
-    await userProfile.save()
+    await userProfile.save();
+
+    const userConnection = new Connection({
+      user: user.id,
+      friends:[],
+      pending:[],
+      waiting:[]
+    });
+
+    const newUserConnection = await userConnection.save();
+    newUser.connection = newUserConnection.id;
+
+    await newUser.save();
 
     const userAbout = new About({
       user: user.id,
       content: ""
-    })
+    });
 
-    await userAbout.save()
+    await userAbout.save();
 
     res.status(200).json({ user: user.id });
   } catch (err) {
