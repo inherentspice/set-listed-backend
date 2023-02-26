@@ -1,0 +1,36 @@
+POST http://localhost:8080/network/sendRequest/63dddee66d67ea2e63f428f1
+Content-Type: application/json
+
+{
+  "friendId": "63f364846ec43e5dbd149eba"
+}
+
+###
+
+POST http://localhost:8080/network/createConnection/63dddee66d67ea2e63f428f1
+
+###
+
+POST http://localhost:8080/network/createConnection/63f364846ec43e5dbd149eba
+###
+
+POST http://localhost:8080/network/createConnection/63f82858e14e567dcd9cbc80
+###
+
+POST http://localhost:8080/network/acceptRequest/63f364846ec43e5dbd149eba
+Content-Type: application/json
+
+{
+  "senderId": "63dddee66d67ea2e63f428f1"
+}
+
+###
+
+DELETE http://localhost:8080/network/deleteFriend/63dddee66d67ea2e63f428f1
+Content-Type: application/json
+
+{
+  "friendId": "63f364846ec43e5dbd149eba"
+}
+
+###
