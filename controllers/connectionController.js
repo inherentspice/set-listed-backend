@@ -19,13 +19,24 @@ exports.createConnection = async (req, res) => {
   }
 };
 
+exports.getConnections = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const userConnections = await Connection.find({user: userId});
+    res.status(200).json({connection: userConnections[0]});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
 exports.sendRequest = async (req, res) => {
   try {
     const senderId = req.params.id;
     const reciepientId = req.body.friendId;
     const sender = await Connection.findOneAndUpdate({ user: senderId }, {$push: { pending: reciepientId }});
     const reciepient = await Connection.findOneAndUpdate({ user: reciepientId }, {$push: { waiting: senderId }});
-    res.status(200).json({message: "Request sent"});
+    res.status(200).json({connection: sender});
   } catch (err) {
     console.log(err);
     next(err);
@@ -46,7 +57,7 @@ exports.acceptRequest = async (req, res) => {
                                                           $pull: { waiting: senderId },
                                                           $push: { friends: senderId }
                                                         });
-    res.status(200).json({message: "Response sent"});
+    res.status(200).json({connection: reciepient});
   } catch (err) {
     console.log(err);
     next(err);
@@ -59,7 +70,7 @@ exports.declineRequest = async (req, res) => {
     const senderId = req.body.senderId;
     const sender = await Connection.findOneAndUpdate({ user: senderId }, {$pull: { pending: reciepientId }});
     const reciepient = await Connection.findOneAndUpdate({ user: reciepientId }, {$pull: { waiting: senderId }});
-    res.status(200).json({message: "Response sent"});
+    res.status(200).json({connection: reciepient});
   } catch (err) {
     console.log(err);
     next(err);
