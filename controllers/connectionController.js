@@ -22,8 +22,24 @@ exports.createConnection = async (req, res) => {
 exports.getConnections = async (req, res) => {
   try {
     const userId = req.params.id;
-    const userConnections = await Connection.find({user: userId});
-    res.status(200).json({connection: userConnections[0]});
+    const userConnections = await Connection.find({user: userId})
+      .populate({
+        path: 'pending',
+        select: '-password -email',
+        populate: { path: 'profileCard', select: 'image' }
+      })
+      .populate({
+        path: 'friends',
+        select: '-password -email',
+        populate: { path: 'profileCard', select: 'image' }
+      })
+      .populate({
+        path: 'waiting',
+        select: '-password -email',
+        populate: { path: 'profileCard', select: 'image' }
+      })
+      .exec();
+    res.status(200).json({connection: userConnections[0]})
   } catch (err) {
     console.log(err);
     next(err);

@@ -9,7 +9,7 @@ const ConnectionSchema = new Schema({
     ref: "User", required: true
   },
   friends: {type: [Schema.Types.ObjectId], required: true, ref: "User"},
-  pending: {type: [Schema.Types.ObjectId], reqruied: true, ref: "User"},
+  pending: {type: [Schema.Types.ObjectId], required: true, ref: "User"},
   waiting: {type: [Schema.Types.ObjectId], required: true, ref: "User"}
 });
 
