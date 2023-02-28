@@ -114,6 +114,7 @@ exports.postSignup = async (req, res, next) => {
 
     const newUserConnection = await userConnection.save();
     newUser.connection = newUserConnection.id;
+    newUser.profileCard = userProfile.id;
 
     await newUser.save();
 
