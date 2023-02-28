@@ -1,16 +1,26 @@
 const Post = require("../models/post");
-const ProfileCard = require("../models/profile-card");
+const Connection = require("../models/connection");
 
 exports.getFeed = async (req, res) => {
   try {
-    const postFeed = await Post.find().sort({createdAt: -1});
-    res.status(200).json({posts: postFeed});
+    const userId = req.params.id;
+    const userConnections = await Connection.findOne({ user: userId });
+
+    console.log(userConnections);
+
+    if (userConnections.friends.length) {
+      const friends = userConnections.friends;
+      const postFeed = await Post.find({ user: { $in: friends } }).sort({createdAt: -1});
+      return res.status(200).json({posts: postFeed});
+    } else {
+      const postFeed = await Post.find().sort({createdAt: -1});
+      return res.status(200).json({posts: postFeed})
+    }
   } catch (err) {
     console.log(err);
     next(err);
   }
-}
-
+};
 exports.createPost = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({error: "Invalid request body"});
