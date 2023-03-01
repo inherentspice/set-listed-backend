@@ -7,8 +7,16 @@ exports.getMessages = async (req, res) => {
   try {
     const messages = await Message.find({ room: req.params.id })
       .sort({ createdAt: "asc" })
-      .populate("user", "firstName lastName")
-      .populate("recipient", "firstName lastName");
+      .populate({
+        path: "user",
+        select: "-password -email",
+        populate: { path: "profileCard", select: "image" }
+      })
+      .populate({
+        path: "recipient",
+        select: "-password -email",
+        populate: { path: "profileCard", select: "image" }
+      })
     res.status(200).json(messages);
   } catch (error) {
     console.log(error);
