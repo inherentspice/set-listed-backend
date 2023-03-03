@@ -12,7 +12,6 @@ const socketIO = require("socket.io");
 const Message = require("./models/messages");
 const Room = require("./models/room");
 
-
 const indexRouter = require("./routes/index");
 const gigsRouter = require("./routes/gigs");
 const messagingRouter = require("./routes/messaging");
