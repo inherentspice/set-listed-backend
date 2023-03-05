@@ -46,6 +46,34 @@ exports.getConnections = async (req, res) => {
   }
 }
 
+exports.getFilteredConnections = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const searchParam = req.params.searchParam;
+    console.log(searchParam);
+    const userConnections = await Connection.find({user: userId})
+      .populate({
+        path: 'friends',
+        select: '-password -email',
+        populate: { path: 'profileCard', select: 'image' }
+      })
+      .exec();
+    if (!userConnections.friends) {
+      return res.status(200).json({connection: userConnections});
+    }
+    const filteredConnections = userConnections.friends.filter((friend) => {
+      const name = `${friend.firstName} ${friend.lastName}`;
+      if (name.indexOf(searchParam) >= 0) {
+        return friend;
+      }
+    });
+    res.status(200).json({connection: filteredConnections})
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
 exports.sendRequest = async (req, res) => {
   try {
     const senderId = req.params.id;

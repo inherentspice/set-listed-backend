@@ -82,29 +82,3 @@ exports.getUserRooms = async (req, res) => {
 exports.deleteRoom = (req, res) => {
   return
 }
-
-
-
-// router.delete("/:id", (req, res) => {
-//   const roomId = req.params.id;
-
-//   Room.findByIdAndDelete(roomId, (err, deletedRoom) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(500).send("Error deleting room");
-//     } else {
-//       console.log("Room deleted:", deletedRoom._id);
-
-//       // Delete all messages associated with the room
-//       Message.deleteMany({ room: deletedRoom._id }, (err) => {
-//         if (err) {
-//           console.error(err);
-//           res.status(500).send("Error deleting messages");
-//         } else {
-//           console.log("Messages deleted for room:", deletedRoom._id);
-//           res.status(200).send("Room deleted");
-//         }
-//       });
-//     }
-//   });
-// });
