@@ -26,17 +26,17 @@ exports.getConnections = async (req, res) => {
       .populate({
         path: 'pending',
         select: '-password -email',
-        populate: { path: 'profileCard', select: 'image' }
+        populate: { path: 'profileCard', select: 'image tagline' }
       })
       .populate({
         path: 'friends',
         select: '-password -email',
-        populate: { path: 'profileCard', select: 'image' }
+        populate: { path: 'profileCard', select: 'image tagline' }
       })
       .populate({
         path: 'waiting',
         select: '-password -email',
-        populate: { path: 'profileCard', select: 'image' }
+        populate: { path: 'profileCard', select: 'image tagline' }
       })
       .exec();
     res.status(200).json({connection: userConnections[0]})
