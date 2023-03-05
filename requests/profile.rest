@@ -54,16 +54,16 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/profile/post/63dddf806d67ea2e63f42904
+PUT http://localhost:8080/profile/post/6404cb59ea4e86a6fe120a25
 Content-Type: application/json
 
 {
-  "content": "I am not man but"
+  "content": "I truly believe I am the Bill Burr of improve stage."
 }
 
 ###
 
-PUT http://localhost:8080/profile/post/likes/63f4add9310ef61a822085cc
+PUT http://localhost:8080/profile/post/likes/6404cb59ea4e86a6fe120a25
 Content-Type: application/json
 
 {
@@ -137,4 +137,40 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:8080/profile/experience/63dddfb16d67ea2e63f42907
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/profile/comment/6404cb59ea4e86a6fe120a25
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/profile/comment
+Content-Type: application/json
+
+{
+  "user": "63f364846ec43e5dbd149eba",
+  "content": "You're more of a Jerry Seinfeld in my mind",
+  "post": "6404cb59ea4e86a6fe120a25"
+}
+
+###
+PUT http://localhost:8080/profile/comment/6404cfde6bed6e4823acffc7
+Content-Type: application/json
+
+{
+  "content": "You're more of a Kramer in my mind"
+}
+
+###
+PUT http://localhost:8080/profile/comment/likes/6404cfde6bed6e4823acffc7
+Content-Type: application/json
+
+{
+  "user": "63dddee66d67ea2e63f428f1"
+}
+
+###
+DELETE http://localhost:8080/profile/comment/6404cfde6bed6e4823acffc7
 Content-Type: application/json

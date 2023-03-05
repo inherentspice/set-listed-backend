@@ -35,4 +35,12 @@ router.put("/post/:id", postController.modifyPost);
 router.delete("/post/:id", postController.deletePost);
 router.put("/post/likes/:id", postController.modifyPostLikes);
 
+router.get("/comment/:id", postController.getComments);
+router.post("/comment", postController.createComment);
+router.put("/comment/:id", postController.modifyComment);
+router.delete("/comment/:id", postController.deleteComment);
+router.put("/comment/likes/:id", postController.modifyCommentLikes);
+
+
+
 module.exports = router;

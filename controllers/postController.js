@@ -1,4 +1,6 @@
 const Post = require("../models/post");
+const Comment = require("../models/comment");
+const ProfileCard = require("../models/profile-card");
 const Connection = require("../models/connection");
 
 exports.getFeed = async (req, res) => {
@@ -21,6 +23,19 @@ exports.getFeed = async (req, res) => {
     next(err);
   }
 };
+
+exports.getComments = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const postComments = await Comment.find({ post: postId });
+
+    return res.status(200).json({comments: postComments});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
 exports.createPost = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({error: "Invalid request body"});
@@ -51,11 +66,57 @@ exports.createPost = async (req, res) => {
   }
 }
 
+exports.createComment = async (req, res) => {
+  if (!req.body) {
+    return res.status(400).json({error: "Invalid request body"});
+  }
+
+  const newCommentInfo = req.body;
+
+  if (!newCommentInfo.user) {
+    return res.status(400).json({error: "User field is required"});
+  }
+
+  if (!newCommentInfo.content) {
+    return res.status(400).json({error: "Content field is required"});
+  }
+
+  if (!newCommentInfo.post) {
+    return res.status(400).json({error: "Post id is required"});
+  }
+
+  const comment = new Comment({
+    user: newCommentInfo.user,
+    content: newCommentInfo.content,
+    post: newCommentInfo.post,
+    likes: []
+  });
+
+  try {
+    const newComment = await comment.save();
+    res.status(200).json({comment: newComment});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
 exports.modifyPost = async (req, res) => {
   const postId = req.params.id;
   try{
     const post = await Post.findByIdAndUpdate(postId, { content: req.body.content }, { new: true });
     res.status(200).json({ post: post });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
+exports.modifyComment = async (req, res) => {
+  const commentId = req.params.id;
+  try{
+    const comment = await Comment.findByIdAndUpdate(commentId, { content: req.body.content }, { new: true });
+    res.status(200).json({ comment: comment });
   } catch (err) {
     console.log(err);
     next(err);
@@ -84,11 +145,43 @@ exports.modifyPostLikes = async (req, res) => {
   }
 }
 
-exports.deletePost = async (req, res) => {
-  const postId = req.params.id;
+exports.modifyCommentLikes = async (req, res) => {
+  const commentId = req.params.id;
+  const likeUser = req.body.user;
   try {
-    const PostId = req.params.id;
-    await Post.findByIdAndDelete(PostId);
+    const comment = await Comment.findById(commentId);
+    const likeSearch = comment.likes.filter((user) => user.valueOf() !== likeUser);
+    if (likeSearch.length === comment.likes.length) {
+      comment.likes.push(likeUser);
+      await ProfileCard.findOneAndUpdate({user: comment.user}, {$inc: {userPostImpressions: 1}});
+      await comment.save();
+    } else {
+      comment.likes = likeSearch;
+      await ProfileCard.findOneAndUpdate({user: comment.user}, {$inc: {userPostImpressions: -1}});
+      await comment.save();
+    }
+    res.status(200).json({comment: comment});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
+exports.deletePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    await Post.findByIdAndDelete(postId);
+    return res.status(200).json({message: "successfully deleted!"});
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
+exports.deleteComment = async (req, res) => {
+  try {
+    const commentId = req.params.id;
+    await Comment.findByIdAndDelete(commentId);
     return res.status(200).json({message: "successfully deleted!"});
   } catch (err) {
     console.log(err);
