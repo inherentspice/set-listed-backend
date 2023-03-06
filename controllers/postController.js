@@ -103,7 +103,7 @@ exports.createComment = async (req, res) => {
   try {
     const newComment = await comment.save();
     const populatedComment = await Comment
-    .findById(newComment._id)
+    .findById(newComment.id)
     .populate('user', '-password -email')
     .populate('user.profileCard', 'image tagline');
     res.status(200).json({ comment: populatedComment });
@@ -173,7 +173,7 @@ exports.modifyCommentLikes = async (req, res) => {
       await ProfileCard.findOneAndUpdate({user: comment.user}, {$inc: {userPostImpressions: -1}});
       await comment.save();
     }
-    res.status(200).json({comment: comment});
+    res.status(200).json({comment: "comment likes changed successfully"});
   } catch (err) {
     console.log(err);
     next(err);
