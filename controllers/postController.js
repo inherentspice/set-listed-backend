@@ -8,11 +8,13 @@ exports.getFeed = async (req, res) => {
     const userId = req.params.id;
     const userConnections = await Connection.findOne({ user: userId });
 
-    console.log(userConnections);
-
     if (userConnections.friends.length) {
       const friends = userConnections.friends;
-      const postFeed = await Post.find({ user: { $in: friends } }).sort({createdAt: -1});
+      let postFeed = await Post.find({ user: { $in: friends } }).sort({createdAt: -1});
+      if (!postFeed.length) {
+        postFeed = await Post.find().sort({createdAt: -1});
+        return res.status(200).json({posts: postFeed})
+      }
       return res.status(200).json({posts: postFeed});
     } else {
       const postFeed = await Post.find().sort({createdAt: -1});
@@ -27,8 +29,14 @@ exports.getFeed = async (req, res) => {
 exports.getComments = async (req, res) => {
   try {
     const postId = req.params.id;
-    const postComments = await Comment.find({ post: postId });
-
+    const postComments = await Comment
+      .find({ post: postId })
+      .populate({
+        path: 'user',
+        select: '-password -email',
+        populate: { path: 'profileCard', select: 'image tagline' }
+      })
+      .exec();
     return res.status(200).json({comments: postComments});
   } catch (err) {
     console.log(err);
@@ -94,11 +102,16 @@ exports.createComment = async (req, res) => {
 
   try {
     const newComment = await comment.save();
-    res.status(200).json({comment: newComment});
+    const populatedComment = await Comment
+    .findById(newComment._id)
+    .populate('user', '-password -email')
+    .populate('user.profileCard', 'image tagline');
+    res.status(200).json({ comment: populatedComment });
   } catch (err) {
     console.log(err);
     next(err);
   }
+
 }
 
 exports.modifyPost = async (req, res) => {
