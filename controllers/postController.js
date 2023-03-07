@@ -151,7 +151,7 @@ exports.modifyPostLikes = async (req, res) => {
       await ProfileCard.findOneAndUpdate({user: post.user}, {$inc: {userPostImpressions: -1}});
       await post.save();
     }
-    res.status(200).json({post: post});
+    res.status(200).json({post: "post likes changes successfully"});
   } catch (err) {
     console.log(err);
     next(err);
