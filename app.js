@@ -11,6 +11,8 @@ const http = require("http");
 const socketIO = require("socket.io");
 const Message = require("./models/messages");
 const Room = require("./models/room");
+const path = require('path');
+
 
 const indexRouter = require("./routes/index");
 const gigsRouter = require("./routes/gigs");
@@ -54,6 +56,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(express.static(path.join(__dirname, 'build')));
 
 app.use("/", indexRouter);
 // app.use("/gigs", gigsRouter);
@@ -61,6 +64,9 @@ app.use("/messaging", messagingRouter);
 app.use("/network", networkRouter);
 // app.use("/notifications", notificationsRouter);
 app.use("/profile", profileRouter);
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 const server = http.createServer(app);
 
