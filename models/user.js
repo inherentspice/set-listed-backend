@@ -46,10 +46,15 @@ UserSchema.methods.comparePassword = function comparePassword(
 
 UserSchema.set("toJSON", {
   transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
+    if (returnedObject._id) {
+      returnedObject.id = returnedObject._id.toString();
+      delete returnedObject._id;
+    } else {
+      console.warn("Warning: returnedObject._id is undefined");
+    }
     delete returnedObject.__v;
   }
 });
+
 
 module.exports = mongoose.model("User", UserSchema);

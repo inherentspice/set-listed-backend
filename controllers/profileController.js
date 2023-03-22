@@ -10,7 +10,6 @@ const cloud = require("../middleware/cloudinary");
 
 exports.getProfileCard = async (req, res) => {
   let id = req.params.id;
-
   try {
     const profileCard = await ProfileCard.find({user: id});
     res.status(200).json({profileCard: profileCard});
